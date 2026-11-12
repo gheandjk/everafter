@@ -1,0 +1,3388 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EverAfter — Wedding Organizer Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --wine: #8b6716;
+  --wine2: #a77d18;
+  --wine-dark: #694e0e;
+  --gold: #b88713;
+  --gold-hover: #9e7411;
+  --gold-subtle: #fbf5e8;
+  --gold-border: #f0e4cc;
+  --cream: #faf9f6;
+  --cream-card: #ffffff;
+  --ink: #232530;
+  --muted: #727480;
+  --muted-light: #9d9fa8;
+  --line: #eeedea;
+  --line-strong: #e2e0da;
+  --shadow-sm: 0 2px 8px rgba(35,37,48,0.035);
+  --shadow-md: 0 6px 20px rgba(35,37,48,0.05);
+  --shadow-lg: 0 16px 40px rgba(35,37,48,0.08);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --green: #257e53;
+  --green-bg: #edf7f1;
+  --amber: #986f16;
+  --amber-bg: #fff7e6;
+  --red: #b33930;
+  --red-bg: #fdf0ef;
+  --blue: #2c6fb5;
+  --blue-bg: #edf4fc;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; border: 0; }
+.hidden { display: none !important; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: #f1efec; }
+::-webkit-scrollbar-thumb { background: #d6d3cc; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #baa780; }
+
+/* Typography */
+h1, h2, h3, h4, .brand {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.animate-fade {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Login Screen */
+.login-screen {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  background: #fbf9f6;
+}
+.login-art {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(30,22,12,0.45), rgba(30,22,12,0.85)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1500&q=85') center/cover;
+  display: flex;
+  align-items: flex-end;
+  padding: 8%;
+}
+.login-art-inner {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  max-width: 600px;
+}
+.login-art h1 {
+  font: 600 clamp(36px, 4.5vw, 64px)/1.1 'Playfair Display', serif;
+  margin: 12px 0 16px;
+  letter-spacing: -0.5px;
+}
+.login-art p {
+  color: #f7eee4;
+  line-height: 1.7;
+  font-size: 15px;
+  max-width: 480px;
+  margin: 0;
+}
+.art-badge {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  font-weight: 600;
+  color: #e8d0a9;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.12);
+  padding: 6px 14px;
+  border-radius: 30px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.login-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 35px;
+}
+.login-card {
+  width: min(420px, 100%);
+  animation: fadeIn 0.4s ease-out;
+}
+.brand {
+  font: 600 28px 'Playfair Display', serif;
+  color: var(--wine);
+  letter-spacing: 0.3px;
+}
+.brand small {
+  display: block;
+  font: 600 10px 'DM Sans', sans-serif;
+  letter-spacing: 2.5px;
+  color: #9a8d72;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+.login-card h2 {
+  font: 600 32px 'Playfair Display';
+  margin: 35px 0 8px;
+  color: var(--ink);
+}
+.sub {
+  color: var(--muted);
+  margin: 0 0 25px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.field {
+  margin: 16px 0;
+}
+.field label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  margin-bottom: 7px;
+  color: #3b3d4a;
+}
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.field input, .field select, .field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  outline: none;
+  color: var(--ink);
+  transition: all 0.2s ease;
+  font-size: 13.5px;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(184, 135, 19, 0.14);
+}
+.toggle-pwd {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 4px;
+}
+
+.primary {
+  background: var(--gold);
+  color: white;
+  border-radius: var(--radius-sm);
+  padding: 12px 18px;
+  font-weight: 600;
+  font-size: 13.5px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(184, 135, 19, 0.2);
+}
+.primary:hover {
+  background: var(--gold-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(184, 135, 19, 0.28);
+}
+.primary:active { transform: translateY(0); }
+.login-btn { width: 100%; margin-top: 10px; padding: 13px; }
+
+.quick-demo-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 11px;
+  background: var(--gold-subtle);
+  color: var(--wine);
+  border: 1px dashed var(--gold);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 12.5px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.quick-demo-btn:hover {
+  background: #f6eedb;
+  border-style: solid;
+}
+
+.hint {
+  font-size: 12px;
+  color: #7b7160;
+  background: #fbf6ec;
+  border: 1px solid #f0e6cf;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  margin-top: 20px;
+  line-height: 1.6;
+}
+.error {
+  color: var(--red);
+  font-size: 12.5px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* App Layout */
+.app {
+  min-height: 100vh;
+  display: flex;
+}
+.sidebar {
+  width: 245px;
+  background: #ffffff;
+  border-right: 1px solid var(--line);
+  padding: 22px 16px;
+  position: fixed;
+  inset: 0 auto 0 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 25;
+  transition: transform 0.3s ease;
+}
+.sidebar .brand {
+  padding: 4px 12px 24px;
+  color: #806018;
+}
+.nav-label {
+  font-size: 9.5px;
+  letter-spacing: 1.6px;
+  font-weight: 700;
+  color: #a4a39f;
+  padding: 0 12px;
+  margin: 18px 0 7px;
+  text-transform: uppercase;
+}
+.nav button {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: transparent;
+  color: #5c5e69;
+  margin: 3px 0;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+.nav button.active, .nav button:hover {
+  background: var(--gold-subtle);
+  color: #88640f;
+  font-weight: 600;
+}
+.nav button.active {
+  box-shadow: inset 3px 0 0 var(--gold);
+}
+.nav .ico {
+  width: 20px;
+  text-align: center;
+  font-size: 16px;
+  color: inherit;
+}
+.sidebar-bottom {
+  margin-top: auto;
+  padding: 14px 10px 6px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.reset-btn {
+  background: transparent;
+  color: var(--muted);
+  font-size: 10.5px;
+  text-decoration: underline;
+  padding: 4px 0;
+  margin-top: 6px;
+  display: block;
+}
+.reset-btn:hover { color: var(--wine); }
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 20;
+}
+
+.main {
+  margin-left: 245px;
+  width: calc(100% - 245px);
+  padding: 26px 36px 60px;
+  max-width: 1600px;
+  min-height: 100vh;
+}
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 26px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.menu-btn {
+  display: none;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 11px;
+  font-size: 18px;
+  color: var(--ink);
+}
+.eyebrow {
+  font-size: 10px;
+  color: #929088;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.topbar h1 {
+  font: 600 28px 'Playfair Display';
+  margin: 4px 0 0;
+  color: #21222b;
+}
+.user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #f7edd8;
+  color: #8b6716;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 14px;
+  border: 1px solid #ebd9b5;
+}
+
+/* Sections & Panels */
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 20px;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.section-head h2 {
+  font: 600 24px 'Playfair Display';
+  margin: 0;
+  color: #21222b;
+}
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Stats Cards */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat, .panel {
+  background: var(--cream-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.stat:hover, .panel:hover {
+  box-shadow: var(--shadow-md);
+}
+.stat-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+.stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: var(--gold-subtle);
+  color: var(--gold);
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+}
+.stat strong {
+  display: block;
+  font: 600 28px 'DM Sans', sans-serif;
+  letter-spacing: -0.6px;
+  color: #21222b;
+  margin: 14px 0 3px;
+}
+.stat small {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 18px;
+}
+.panel h3 {
+  font: 600 18px 'DM Sans', sans-serif;
+  margin: 0 0 16px;
+  color: #22242e;
+  letter-spacing: -0.2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.event-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+.event-row:last-child { border: 0; }
+.event-info { flex: 1; min-width: 0; }
+.event-info b {
+  font-size: 13.5px;
+  color: #22242e;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.event-info small {
+  display: block;
+  color: var(--muted);
+  margin-top: 3px;
+  font-size: 11.5px;
+}
+
+/* Badges / Pills */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 30px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--green-bg);
+  color: var(--green);
+}
+.pill.pending {
+  background: var(--amber-bg);
+  color: var(--amber);
+}
+.pill.cancel {
+  background: var(--red-bg);
+  color: var(--red);
+}
+.pill.blue {
+  background: var(--blue-bg);
+  color: var(--blue);
+}
+
+/* Tables */
+.table-wrap {
+  overflow-x: auto;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+th, td {
+  text-align: left;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12.5px;
+}
+th {
+  background: #faf9f6;
+  color: #797a85;
+  font-size: 10.5px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+tr:last-child td { border: 0; }
+tr:hover td { background: #faf8f5; }
+.person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+.mini-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gold-subtle);
+  color: var(--wine);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 11.5px;
+  border: 1px solid var(--gold-border);
+}
+.actions {
+  display: flex;
+  gap: 6px;
+}
+.small-btn {
+  background: var(--gold-subtle);
+  color: #896510;
+  padding: 6px 11px;
+  border-radius: 7px;
+  font-size: 11.5px;
+  font-weight: 600;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.small-btn:hover {
+  background: #f4e9d0;
+  color: #6d4f0a;
+}
+.small-btn.danger {
+  background: var(--red-bg);
+  color: var(--red);
+}
+.small-btn.danger:hover {
+  background: #f7dedc;
+}
+.small-btn.outline {
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+.small-btn.outline:hover {
+  background: #f7f6f2;
+}
+
+/* Toolbars & Filters */
+.toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.search {
+  padding: 10px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  width: 280px;
+  outline: none;
+  font-size: 13px;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(184,135,19,0.12);
+}
+.filter-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.chip {
+  padding: 7px 13px;
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #5d606d;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.chip.active, .chip:hover {
+  background: var(--gold-subtle);
+  border-color: var(--gold);
+  color: #806018;
+  font-weight: 600;
+}
+.toolbar .spacer { flex: 1; }
+
+/* Modals */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(22, 20, 24, 0.6);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-out;
+}
+.modal {
+  background: white;
+  border-radius: var(--radius-lg);
+  width: min(520px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 26px;
+  box-shadow: var(--shadow-lg);
+  animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal.large {
+  width: min(780px, 100%);
+}
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.modal-head h3 {
+  font: 600 22px 'Playfair Display';
+  margin: 0;
+  color: #21222b;
+}
+.close {
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--muted);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.close:hover { background: #f0eeea; color: var(--ink); }
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.secondary {
+  background: #f3f1ee;
+  color: #494b55;
+  padding: 11px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.15s;
+}
+.secondary:hover { background: #e8e5e0; }
+.empty {
+  padding: 45px 20px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+
+/* Tabs Header */
+.view-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--line-strong);
+  margin-bottom: 20px;
+}
+.view-tab {
+  padding: 11px 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  border-radius: 6px 6px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s;
+}
+.view-tab.active {
+  color: var(--wine);
+  border-bottom-color: var(--gold);
+  background: var(--gold-subtle);
+}
+.view-tab:hover:not(.active) {
+  color: var(--ink);
+  background: #faf8f5;
+}
+
+/* Package Cards */
+.package-card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.package-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+.pkg-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: #eee8e0;
+}
+.pkg-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.package-card:hover .pkg-img-wrap img {
+  transform: scale(1.04);
+}
+.pkg-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(35, 30, 24, 0.85);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+  letter-spacing: 0.5px;
+}
+.pkg-price-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #8b6716;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.pkg-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.pkg-title {
+  font: 600 20px 'Playfair Display';
+  margin: 4px 0 8px;
+  color: #21222b;
+}
+.pkg-desc {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0 0 16px;
+  flex: 1;
+}
+.pkg-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.pkg-tag {
+  font-size: 11px;
+  padding: 4px 9px;
+  background: #f7f5f0;
+  border-radius: 6px;
+  color: #636675;
+  font-weight: 500;
+}
+.pkg-actions {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 8px;
+  margin-top: auto;
+}
+
+/* Vendor Cards */
+.vendor-card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.vendor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.vendor-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-bottom: 12px;
+}
+.vendor-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--gold-subtle);
+  color: var(--wine);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  border: 1px solid var(--gold-border);
+  flex-shrink: 0;
+}
+.vendor-title {
+  flex: 1;
+  min-width: 0;
+}
+.vendor-title b {
+  font-size: 15px;
+  color: #21222b;
+  display: block;
+}
+.vendor-meta {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.vendor-desc {
+  font-size: 12px;
+  color: #555763;
+  line-height: 1.6;
+  margin: 0 0 14px;
+  flex: 1;
+}
+.vendor-used {
+  background: #faf8f5;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 11px;
+  color: #69604c;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.vendor-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+/* Modal Inclusions Breakdown */
+.inclusions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 16px 0;
+}
+.inc-card {
+  background: #fbfaf7;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px;
+}
+.inc-head {
+  font-weight: 700;
+  font-size: 12.5px;
+  color: #7b590e;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.inc-list {
+  margin: 0;
+  padding-left: 17px;
+  font-size: 12px;
+  color: #4b4d58;
+  line-height: 1.6;
+}
+
+/* Funnel Refinements */
+.funnel-panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  margin: 0 0 18px;
+  box-shadow: var(--shadow-sm);
+}
+.funnel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 18px;
+}
+.funnel-head h3 {
+  font: 600 18px 'DM Sans';
+  margin: 0 0 5px;
+}
+.funnel-head p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+}
+.funnel-total strong {
+  display: block;
+  font: 600 28px 'DM Sans';
+  color: #278052;
+}
+.funnel-total small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.funnel-list {
+  display: grid;
+  gap: 8px;
+}
+.funnel-step {
+  height: 38px;
+  margin-inline: auto;
+  max-width: 100%;
+  border-radius: 30px;
+  background: linear-gradient(90deg, #237856, #4fb38b);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-size: 11.5px;
+  font-weight: 600;
+  transition: transform 0.15s;
+}
+.funnel-step:hover {
+  transform: scale(1.01);
+}
+.funnel-step:nth-child(2) { background: linear-gradient(90deg, #29835f, #57b791); }
+.funnel-step:nth-child(3) { background: linear-gradient(90deg, #308e69, #5dbb95); }
+.funnel-step:nth-child(4) { background: linear-gradient(90deg, #389571, #64bd99); }
+.funnel-step:nth-child(5) { background: linear-gradient(90deg, #439d7a, #6dc2a0); }
+.funnel-step:nth-child(6) { background: linear-gradient(90deg, #4da482, #75c6a5); }
+.funnel-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.funnel-rate {
+  font-size: 9.5px;
+  background: rgba(255,255,255,0.22);
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+.funnel-foot {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 14px;
+}
+
+/* ========================================== */
+/* EVERAFTER AI CHAT WIDGET (HERMES POWERED)  */
+/* ========================================== */
+.ai-widget-card {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: min(440px, calc(100vw - 32px));
+  background: #fbf9f5;
+  border: 1px solid #eeede8;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 16px 45px rgba(35, 37, 48, 0.14), 0 3px 10px rgba(0, 0, 0, 0.04);
+  z-index: 500;
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ai-widget-card.minimized {
+  display: none !important;
+}
+
+.ai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #eeede8;
+  margin-bottom: 14px;
+}
+.ai-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ai-avatar-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #b08422;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(176, 132, 34, 0.25);
+  flex-shrink: 0;
+}
+.ai-title-wrap h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #21222b;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.2;
+}
+.ai-status-sub {
+  font-size: 12px;
+  color: #278052;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+}
+.ai-status-dot {
+  width: 7.5px;
+  height: 7.5px;
+  border-radius: 50%;
+  background: #278052;
+  display: inline-block;
+  animation: pulseDot 2s infinite ease-in-out;
+}
+.ai-status-dot.offline {
+  background: #b33930;
+  animation: none;
+}
+.ai-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  color: #727480;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+.ai-close-btn:hover {
+  color: #21222b;
+  background: #f0eee8;
+}
+
+.ai-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 380px;
+  min-height: 240px;
+  overflow-y: auto;
+  padding-right: 4px;
+  margin-bottom: 14px;
+}
+
+.ai-card-msg {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 1px 4px rgba(35, 37, 48, 0.03);
+  border: 1px solid #f2efe9;
+  max-width: 95%;
+  align-self: flex-start;
+  animation: fadeIn 0.2s ease-out;
+}
+.ai-card-msg b {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #21222b;
+  display: block;
+  margin-bottom: 6px;
+}
+.ai-card-msg p {
+  margin: 0;
+  font-size: 13px;
+  color: #555765;
+  line-height: 1.55;
+}
+
+.ai-user-pill {
+  background: #b08422;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  max-width: 90%;
+  align-self: flex-end;
+  line-height: 1.45;
+  box-shadow: 0 2px 8px rgba(176, 132, 34, 0.2);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.ai-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 4px 0 10px;
+}
+.ai-chip-prompt {
+  background: #ffffff;
+  border: 1px dashed #d9d5cb;
+  border-radius: 10px;
+  padding: 9px 13px;
+  font-size: 12px;
+  color: #7a5812;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 500;
+}
+.ai-chip-prompt:hover {
+  background: #fbf5e8;
+  border-style: solid;
+  border-color: #b08422;
+}
+
+.ai-input-form {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #e7e5df;
+  border-radius: 14px;
+  padding: 6px 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.ai-input-form:focus-within {
+  border-color: #b08422;
+  box-shadow: 0 0 0 3px rgba(176, 132, 34, 0.12);
+}
+.ai-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #21222b;
+  padding: 8px 4px;
+}
+.ai-input::placeholder {
+  color: #8c8d96;
+}
+.ai-send-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 8px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: #b08422;
+  transition: transform 0.15s;
+}
+.ai-send-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Floating Trigger Button */
+.ai-launcher-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #b08422;
+  color: #ffffff;
+  border-radius: 30px;
+  padding: 11px 18px;
+  font-weight: 600;
+  font-size: 13.5px;
+  box-shadow: 0 8px 24px rgba(176, 132, 34, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  z-index: 490;
+  cursor: pointer;
+  transition: all 0.2s;
+  animation: fadeIn 0.3s ease-out;
+}
+.ai-launcher-btn:hover {
+  background: #987018;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(176, 132, 34, 0.4);
+}
+.ai-launcher-btn.hidden {
+  display: none !important;
+}
+
+/* Toast Container */
+#toastContainer {
+  position: fixed;
+  bottom: 84px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  z-index: 999;
+}
+.toast {
+  background: #232530;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  animation: slideDown 0.25s cubic-bezier(0.16,1,0.3,1);
+  max-width: 360px;
+}
+.toast.toast-success { border-left: 4px solid #34a853; }
+.toast.toast-danger { border-left: 4px solid #ea4335; }
+.toast.fade-out { opacity: 0; transform: translateY(10px); transition: all 0.25s; }
+
+/* Responsive adjustments */
+@media(max-width: 1050px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .main { padding: 22px 24px; }
+  .inclusions-grid { grid-template-columns: 1fr; }
+}
+@media(max-width: 768px) {
+  .login-screen { grid-template-columns: 1fr; }
+  .login-art { display: none; }
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: 0 0 40px rgba(0,0,0,0.2);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  .sidebar-overlay.open { display: block; }
+  .main {
+    margin-left: 0;
+    width: 100%;
+    padding: 18px 16px;
+  }
+  .menu-btn { display: inline-flex; }
+  .user span { display: none; }
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .search { width: 100%; }
+  .pkg-actions { grid-template-columns: 1fr; }
+  .ai-widget-card {
+    right: 12px;
+    bottom: 12px;
+    width: calc(100vw - 24px);
+    max-height: 85vh;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<section id="loginScreen" class="login-screen">
+  <div class="login-art">
+    <div class="login-art-inner">
+      <span class="art-badge">MOMENTS MADE TIMELESS</span>
+      <h1>Every love story deserves a beautiful beginning.</h1>
+      <p>Kelola setiap detail pernikahan dengan lebih mudah, rapi, dan berkesan bersama EverAfter Wedding Organizer Suite.</p>
+    </div>
+  </div>
+  <div class="login-panel">
+    <div class="login-card">
+      <div class="brand">everafter.<small>WEDDING ORGANIZER</small></div>
+      <h2>Welcome back</h2>
+      <p class="sub">Masuk ke dashboard untuk mengelola vendor, paket, dan acara pernikahan klien Anda.</p>
+      <form id="loginForm">
+        <div class="field">
+          <label>Email Planner</label>
+          <input id="email" type="email" placeholder="admin@everafter.com" value="admin@everafter.com" required>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap">
+            <input id="password" type="password" placeholder="Masukkan password" value="everafter123" required>
+            <button type="button" class="toggle-pwd" id="togglePwd" title="Lihat password">👁</button>
+          </div>
+        </div>
+        <button class="primary login-btn">Sign in to dashboard</button>
+        <button type="button" class="quick-demo-btn" id="quickLoginBtn">⚡ Masuk Otomatis (Akun Demo)</button>
+        <div id="loginError" class="error"></div>
+      </form>
+      <div class="hint">
+        <b>Akun Demo Siap Pakai:</b><br>
+        Email: <code>admin@everafter.com</code><br>
+        Password: <code>everafter123</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main App -->
+<div id="app" class="app hidden">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">everafter.<small>WEDDING ORGANIZER</small></div>
+    <div class="nav-label">WORKSPACE</div>
+    <nav class="nav">
+      <button class="active" data-page="dashboard"><span class="ico">⌂</span><span>Dashboard</span></button>
+      <div class="nav-label">MANAGE</div>
+      <button data-page="clients"><span class="ico">♙</span><span>Leads & Clients</span></button>
+      <button data-page="events"><span class="ico">♡</span><span>Weddings & Bookings</span></button>
+      <button data-page="packages"><span class="ico">▤</span><span>Packages & Proposals</span></button>
+      <button data-page="payments"><span class="ico">◇</span><span>Quotes & Payments</span></button>
+      <div class="nav-label">PLANNING & VENDORS</div>
+      <button data-page="tasks"><span class="ico">☑</span><span>Tasks & Checklist</span></button>
+      <button data-page="vendors"><span class="ico">♧</span><span>Vendor Library</span></button>
+      <button data-page="analytics"><span class="ico">↗</span><span>Analytics</span></button>
+      <button id="sidebarAiTrigger" type="button" style="color: #8b6716; background: #fbf5e8; font-weight: 600; margin-top: 6px">
+        <span class="ico">✦</span><span>EverAfter AI</span><span class="pill" style="font-size: 9px; padding: 2px 7px; margin-left: auto; background: #eaf7f1; color: #278052">Hermes</span>
+      </button>
+    </nav>
+    <div class="sidebar-bottom">
+      <b>EverAfter Suite v2.0</b><br>
+      Gold Luxe Edition · Hermes AI Ready
+      <button class="reset-btn" id="resetDemoBtn" title="Reset dataset paket & vendor ke data lengkap">⟳ Pulihkan Data Demo Lengkap</button>
+      <button class="reset-btn" id="testN8nBtn" style="color: #278052; font-weight: 600; margin-top: 5px; display: inline-flex; align-items: center; gap: 4px;" title="Cek status koneksi webhook n8n dan Google Sheets">⚡ Tes Koneksi n8n & Sheets</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-btn" id="menuToggle" aria-label="Buka navigasi">☰</button>
+        <div>
+          <div class="eyebrow">WEDDING ORGANIZER MANAGEMENT</div>
+          <h1 id="pageTitle">Dashboard</h1>
+        </div>
+      </div>
+      <div class="user">
+        <div class="avatar">A</div>
+        <span>Administrator</span>
+        <button class="small-btn outline" id="logout">Keluar ↗</button>
+      </div>
+    </header>
+
+    <div id="content" class="animate-fade"></div>
+  </main>
+</div>
+
+<!-- ========================================== -->
+<!-- EVERAFTER AI WIDGET (TARGET SCREENSHOT UI) -->
+<!-- ========================================== -->
+<div id="aiWidgetCard" class="ai-widget-card">
+  <div class="ai-header">
+    <div class="ai-header-left">
+      <div class="ai-avatar-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2l2.4 6.8L21 11.2l-6.6 2.4L12 21l-2.4-7.4L3 11.2l6.6-2.4z"/>
+          <path d="M19 3l.8 2.2L22 6l-2.2.8L19 9l-.8-2.2L16 6l2.2-.8z" stroke-width="1.6"/>
+        </svg>
+      </div>
+      <div class="ai-title-wrap">
+        <h3>EverAfter AI</h3>
+        <div class="ai-status-sub">
+          <span class="ai-status-dot" id="aiStatusDot"></span>
+          <span id="aiStatusText">Online · Powered by Hermes</span>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="ai-close-btn" id="closeAiBtn" title="Tutup Chat">✕</button>
+  </div>
+
+  <div class="ai-messages" id="aiMessagesContainer">
+    <!-- Initial Greeting Card from screenshot -->
+    <div class="ai-card-msg">
+      <b>Halo, Administrator!</b>
+      <p>Saya EverAfter AI. Ada yang bisa saya bantu untuk mengelola acara pernikahan hari ini?</p>
+    </div>
+
+    <!-- Quick Prompt Suggestions -->
+    <div class="ai-suggestions" id="aiSuggestionsWrap">
+      <div class="ai-chip-prompt" onclick="quickSendPrompt('Tampilkan ringkasan pembayaran bulan ini.')">
+        💬 "Tampilkan ringkasan pembayaran bulan ini."
+      </div>
+      <div class="ai-chip-prompt" onclick="quickSendPrompt('Bagaimana status acara pernikahan Nadia & Arif?')">
+        💍 "Bagaimana status acara pernikahan Nadia & Arif?"
+      </div>
+      <div class="ai-chip-prompt" onclick="quickSendPrompt('Rekomendasikan paket pernikahan untuk budget 50 juta.')">
+        💐 "Rekomendasikan paket pernikahan untuk budget 50 juta."
+      </div>
+    </div>
+  </div>
+
+  <form id="aiChatForm" class="ai-input-form">
+    <input id="aiInput" class="ai-input" type="text" placeholder="Tulis pesan..." autocomplete="off" required>
+    <button type="submit" class="ai-send-btn" title="Kirim pesan">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#b08422" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+      </svg>
+    </button>
+  </form>
+</div>
+
+<!-- Floating Launcher Button when minimized -->
+<button type="button" id="aiLauncherBtn" class="ai-launcher-btn hidden">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M12 2l2.4 6.8L21 11.2l-6.6 2.4L12 21l-2.4-7.4L3 11.2l6.6-2.4z"/>
+  </svg>
+  <span>EverAfter AI</span>
+  <span style="width: 7px; height: 7px; border-radius: 50%; background: #45d88f; display: inline-block"></span>
+</button>
+
+<!-- Standard CRUD Modal -->
+<div id="modalBg" class="modal-bg hidden">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modalTitle">Tambah data</h3>
+      <button class="close" id="closeModal">×</button>
+    </div>
+    <form id="dataForm">
+      <div id="formFields"></div>
+      <div class="modal-actions">
+        <button type="button" class="secondary" id="cancelModal">Batal</button>
+        <button class="primary">Simpan data</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Package Detail Modal -->
+<div id="packageModalBg" class="modal-bg hidden">
+  <div class="modal large">
+    <div class="modal-head">
+      <h3 id="pkgModalTitle">Detail Paket Wedding</h3>
+      <button class="close" id="closePkgModal">×</button>
+    </div>
+    <div id="pkgModalContent"></div>
+    <div class="modal-actions">
+      <button type="button" class="secondary" id="closePkgModalBtn">Tutup</button>
+      <button type="button" class="primary" id="copyProposalBtn">📋 Salin Format Penawaran</button>
+      <button type="button" class="primary" id="usePackageBtn">💍 Gunakan untuk Klien Baru</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Box -->
+<div id="toastContainer"></div>
+
+<script>
+// ==========================================
+// VENDOR DIRECTORY & PACKAGE INCLUSIONS DATA
+// ==========================================
+const defaultVendors = [
+  { id: 1, name: 'Royal Blossom Decor', category: 'Dekorasi', rating: 4.9, reviews: 58, contact: '0812-8899-1122', instagram: '@royalblossom.decor', location: 'Jakarta & Tangerang', status: 'Official Partner', desc: 'Spesialis Grand Ballroom, Classic Floral Architecture & Fresh Flower Styling megah bertaraf internasional.', usedIn: ['Royal Wedding', 'Modern Luxury', 'Royal Adat Nusantara'] },
+  { id: 2, name: 'Gardenia Rustic Florist', category: 'Dekorasi', rating: 4.8, reviews: 45, contact: '0813-7722-3344', instagram: '@gardenia.rustic', location: 'Bogor & Bandung', status: 'Verified Partner', desc: 'Dekorasi Outdoor, Glasshouse, Botanical Pergola & Fairy Lights Tunnel romantis bernuansa alam asri.', usedIn: ['Garden Party', 'Rustic Botanical Intimate'] },
+  { id: 3, name: 'Mahligai Adat Kencana', category: 'Dekorasi', rating: 4.9, reviews: 72, contact: '0857-1133-8899', instagram: '@mahligai.adat', location: 'Jakarta & Bekasi', status: 'Exclusive Partner', desc: 'Pelaminan Tradisional Adat Jawa, Sunda, Minang, Gebyok Ukir Jepara, Janur Kuning & Ornamen Keraton.', usedIn: ['Traditional Wedding', 'Royal Adat Nusantara'] },
+  { id: 4, name: 'Bella Fleur Atelier', category: 'Dekorasi', rating: 4.8, reviews: 39, contact: '0812-4455-6677', instagram: '@bellafleur.id', location: 'Jakarta Selatan', status: 'Official Partner', desc: 'Minimalist & Intimate Floral Styling, Clean Aesthetic & Contemporary Backdrop elegan modern.', usedIn: ['Intimate Wedding', 'Akad & Intimate Blessing'] },
+  { id: 5, name: 'Vespera Concept & Lighting', category: 'Dekorasi', rating: 5.0, reviews: 34, contact: '0811-9988-7766', instagram: '@vespera.concept', location: 'Jakarta', status: 'Exclusive Partner', desc: 'Modern Glamour, Mirror Carpet, Kinetic Lighting, LED Tunnel of Lights & Acrylic Stage futuristik.', usedIn: ['Modern Luxury'] },
+  { id: 6, name: 'Medina Royal Catering', category: 'Catering', rating: 4.9, reviews: 104, contact: '0812-9900-1122', instagram: '@medina.royalcatering', location: 'Jabodetabek', status: 'Official Partner', desc: 'Prasmanan Mewah International & Nusantara, Sertifikasi Halal MUI, Live Food Stalls chef bintang lima.', usedIn: ['Royal Wedding', 'Modern Luxury'] },
+  { id: 7, name: 'Lavender Gourmet & Banquet', category: 'Catering', rating: 4.8, reviews: 68, contact: '0813-2233-4455', instagram: '@lavender.gourmet', location: 'Jakarta & Depok', status: 'Verified Partner', desc: 'Fine Dining Buffet, Western Fusion, Dessert Bar & Custom Wedding Mocktails segar memikat rasa.', usedIn: ['Garden Party', 'Modern Luxury'] },
+  { id: 8, name: 'Kraton Heritage Culinary', category: 'Catering', rating: 4.9, reviews: 83, contact: '0856-4433-2211', instagram: '@kraton.heritage', location: 'Jakarta & Bekasi', status: 'Official Partner', desc: 'Kuliner Adat Otentik Nusantara, Gubukan Khas Tradisional (Gudeg, Sate Lilit, Tengkleng) & Jamu Segar.', usedIn: ['Traditional Wedding', 'Royal Adat Nusantara'] },
+  { id: 9, name: 'Selera Rasa Catering', category: 'Catering', rating: 4.7, reviews: 55, contact: '0819-3322-1100', instagram: '@selerarasa.catering', location: 'Jakarta Timur', status: 'Verified Partner', desc: 'Paket Buffet Intimate & Prasmanan Keluarga Lezat, Higienis, Bersih, Cita Rasa Rumahan Istimewa.', usedIn: ['Intimate Wedding', 'Rustic Botanical Intimate', 'Akad & Intimate Blessing'] },
+  { id: 10, name: 'Bennu Artistry & Glam Team', category: 'MUA & Busana', rating: 5.0, reviews: 92, contact: '0812-7788-9911', instagram: '@bennu.artistry', location: 'Jakarta', status: 'Exclusive Partner', desc: 'Celebrity Makeup Artist, Flawless High-Coverage, Royal Wedding Specialist berpengalaman luas.', usedIn: ['Royal Wedding', 'Modern Luxury'] },
+  { id: 11, name: 'Sanggar Kusuma Busana Adat', category: 'MUA & Busana', rating: 4.9, reviews: 118, contact: '0813-8877-6655', instagram: '@kusuma.busanaadat', location: 'Jakarta & Tangerang', status: 'Exclusive Partner', desc: 'Rias Pengantin Pakem Adat (Paes Ageng, Siger, Suntiang), Busana Bludru Beludru & Songket Emas Murni.', usedIn: ['Traditional Wedding', 'Royal Adat Nusantara'] },
+  { id: 12, name: 'Glow Glam by Siska', category: 'MUA & Busana', rating: 4.8, reviews: 61, contact: '0857-2211-9988', instagram: '@glowglam.siska', location: 'Jakarta Selatan', status: 'Verified Partner', desc: 'Soft Romantic Korean Look, Hijab Do Stylist modern & Koleksi Gaun Pengantin terupdate.', usedIn: ['Garden Party', 'Akad & Intimate Blessing'] },
+  { id: 13, name: 'Aura Beauty Studio', category: 'MUA & Busana', rating: 4.7, reviews: 48, contact: '0818-4433-2211', instagram: '@aurabeauty.studio', location: 'Depok & Jakarta', status: 'Verified Partner', desc: 'Clean Minimalist Makeup, Natural Glowing Finish & Fresh Hairdo anggun tahan seharian.', usedIn: ['Intimate Wedding', 'Rustic Botanical Intimate'] },
+  { id: 14, name: 'The Leonardi & Calia Team', category: 'Dokumentasi', rating: 4.9, reviews: 125, contact: '0811-3322-4455', instagram: '@leonardi.calia', location: 'Jakarta', status: 'Exclusive Partner', desc: 'Fine Art Wedding Photography, Cinematic Video 4K, Same Day Edit (SDE) & Leather Album Mewah.', usedIn: ['Royal Wedding', 'Modern Luxury'] },
+  { id: 15, name: 'Lumina Cinematic Wedding', category: 'Dokumentasi', rating: 4.8, reviews: 70, contact: '0812-3344-5566', instagram: '@lumina.cinematic', location: 'Jakarta & Bandung', status: 'Official Partner', desc: 'Dokumentasi Prosesi Adat, Emotional Storytelling Film & Photobook Eksklusif bernilai seni tinggi.', usedIn: ['Traditional Wedding', 'Royal Adat Nusantara'] },
+  { id: 16, name: 'Calia Photography & Drone', category: 'Dokumentasi', rating: 4.8, reviews: 64, contact: '0813-9988-7744', instagram: '@calia.photo', location: 'Jabodetabek', status: 'Official Partner', desc: 'Outdoor & Garden Photo Specialist, Drone 4K Aerial Shots & Social Media Reels estetik.', usedIn: ['Garden Party'] },
+  { id: 17, name: 'LensCraft Moments', category: 'Dokumentasi', rating: 4.7, reviews: 52, contact: '0856-7788-9900', instagram: '@lenscraft.moments', location: 'Jakarta', status: 'Verified Partner', desc: 'Intimate Storytelling, Candid Shots, Full High-Res Drive & Fast Editing profesional.', usedIn: ['Intimate Wedding', 'Rustic Botanical Intimate', 'Akad & Intimate Blessing'] },
+  { id: 18, name: 'Batavia Symphony & Orchestra', category: 'Entertainment', rating: 4.9, reviews: 80, contact: '0812-6677-8899', instagram: '@batavia.symphony', location: 'Jakarta', status: 'Exclusive Partner', desc: 'Mini Chamber Orchestra, Jazz Quintet, Full Band Top 40, & Sound System Konser megah.', usedIn: ['Royal Wedding', 'Modern Luxury'] },
+  { id: 19, name: 'Soulmate Acoustic Ensemble', category: 'Entertainment', rating: 4.8, reviews: 67, contact: '0813-1122-3377', instagram: '@soulmate.acoustic', location: 'Jabodetabek', status: 'Official Partner', desc: 'Acoustic Trio Romantis (Vokal, Saxophone/Gitar, Keyboard), lagu romantis & syahdu.', usedIn: ['Garden Party', 'Rustic Botanical Intimate'] },
+  { id: 20, name: 'Alphi MC & Associates', category: 'Entertainment', rating: 4.9, reviews: 91, contact: '0811-2233-4411', instagram: '@alphimc.wedding', location: 'Jakarta', status: 'Exclusive Partner', desc: 'Bilingual Professional Wedding MC (Indonesia & Inggris), Protokoler & Fun Atmosphere.', usedIn: ['Royal Wedding', 'Traditional Wedding', 'Modern Luxury', 'Royal Adat Nusantara'] },
+  { id: 21, name: 'Grand Ballroom Jakarta', category: 'Venue', rating: 4.9, reviews: 152, contact: '0812-1000-2000', instagram: '@grandballroom.jkt', location: 'Jakarta Pusat', status: 'Official Partner', desc: 'Kapasitas hingga 1.000 pax, Ceiling 8m, Full Karpet Mewah, Ruang VIP & Parkir Luas.', usedIn: ['Royal Wedding', 'Modern Luxury'] },
+  { id: 22, name: 'The Garden Glasshouse', category: 'Venue', rating: 4.8, reviews: 98, contact: '0813-5000-6000', instagram: '@gardenglasshouse.id', location: 'Jakarta Selatan', status: 'Official Partner', desc: 'Glasshouse Romantis dikelilingi taman hijau asri, kapasitas 300 pax, suasana intim & sejuk.', usedIn: ['Garden Party', 'Rustic Botanical Intimate'] },
+  { id: 23, name: 'Ki Ageng Panatacara', category: 'Pemandu Adat', rating: 4.9, reviews: 62, contact: '0812-9876-5432', instagram: '@kiageng.adat', location: 'Jakarta & Jawa Tengah', status: 'Verified Partner', desc: 'Pemandu Upacara Adat Jawa & Sunda Senior, Pembawa Ritus Siraman, Midodareni & Panggih.', usedIn: ['Traditional Wedding', 'Royal Adat Nusantara'] }
+];
+
+const defaultPackages = [
+  {
+    id: 1,
+    name: 'Intimate Wedding',
+    price: 25000000,
+    category: 'Intimate (<200 Tamu)',
+    guestCapacity: 'Hingga 100 tamu',
+    concept: 'Minimalist & Intimate',
+    image: 'assets/intimate-wedding.png',
+    accentColor: '#c8a85a',
+    description: 'Acara intimate hingga 100 tamu dengan sentuhan minimalis elegan untuk momen hangat bersama keluarga dan kerabat terdekat.',
+    vendorCount: 4,
+    vendorsList: ['Bella Fleur Atelier (Dekor)', 'Selera Rasa Catering', 'Aura Beauty Studio (MUA)', 'LensCraft Moments (Foto/Video)'],
+    inclusions: {
+      dekorasi: ['Pelaminan Modern Minimalis 4-5 meter', 'Standing Flower & Welcome Gate', 'Meja VIP Keluarga & Kursi Tiffany 50 pcs', 'Hand Bouquet & Boutonniere Pengantin'],
+      catering: ['Prasmanan 100 porsi (5 Menu Utama + Nasi & Sup)', 'Dessert Corner & Aneka Buah Segar', 'Free Flow Mineral Water & Welcome Drink'],
+      attire: ['1x Rias & Busana Pengantin Akad Nikah', '1x Retouch Makeup Resepsi', 'Rias & Busana 2 Ibu Pengantin & 2 Besan'],
+      dokumentasi: ['1 Fotografer + 1 Videografer (6 Jam Kerja)', '100+ Edited Photos & All Raw Files di Google Drive', '1 Menit Cinematic Teaser Video'],
+      entertainment: ['Portable PA Sound System 2000W + 2 Mic Wireless', 'Background Romantic Playlist Operator'],
+      organizer: ['4 Kru Wedding Organizer On-The-Day', '1x Technical Meeting & Pendampingan Persiapan', 'Master Rundown Acara']
+    }
+  },
+  {
+    id: 2,
+    name: 'Garden Party',
+    price: 45000000,
+    category: 'Outdoor & Garden',
+    guestCapacity: 'Hingga 200 tamu',
+    concept: 'Outdoor & Romantic',
+    image: 'assets/garden-party.png',
+    accentColor: '#79a58b',
+    description: 'Pernikahan outdoor berkonsep taman romantis dengan pergola bunga, fairy lights, live acoustic, dan suasana alam yang magis.',
+    vendorCount: 5,
+    vendorsList: ['Gardenia Rustic Florist', 'Lavender Gourmet Catering', 'Glow Glam by Siska (MUA)', 'Calia Photography & Drone', 'Soulmate Acoustic Ensemble'],
+    inclusions: {
+      dekorasi: ['Pergola Arch Rustic 6 meter dengan Daun & Bunga Segar', 'Fairy Lights Canopy Tunnel & Hanging Edison Bulbs', 'Photobooth Rustic Garden & Welcome Board', 'Aisles Carpet & Centerpiece Meja Tamu'],
+      catering: ['Prasmanan 200 porsi (6 Menu Pilihan)', '2 Food Stalls Spesial @100 porsi (Zuppa Soup & Dimsum)', 'Dessert Bar, Mocktail Refreshment & Ice Tea'],
+      attire: ['Makeup Pengantin Akad + Resepsi', '2 Pasang Busana Pengantin (Modern / Kebaya Modifikasi)', 'Makeup & Busana 2 Ibu Pengantin & 2 Besan'],
+      dokumentasi: ['2 Fotografer + 1 Videografer Profesional', 'Drone Aerial Pilot untuk Footage Venue Outdoor', '1 Menit Teaser Reels + 10 Menit Cinematic Highlight', '1 Eksklusif Magnetic Photobook 20 Halaman'],
+      entertainment: ['Acoustic Trio (Vokal, Gitar/Saxophone, Keyboard)', 'Professional Wedding MC Outdoor', 'Sound System Outdoor 4000W'],
+      organizer: ['6 Kru Wedding Organizer On-The-Day EverAfter', 'Buku Panduan Pernikahan Lengkap', 'Koordinasi Vendor H-30 & Gladi Resik H-1']
+    }
+  },
+  {
+    id: 3,
+    name: 'Traditional Wedding',
+    price: 60000000,
+    category: 'Traditional Adat',
+    guestCapacity: 'Hingga 350 tamu',
+    concept: 'Traditional Heritage',
+    image: 'assets/traditional-wedding.png',
+    accentColor: '#9b8066',
+    description: 'Konsep pernikahan adat nusantara bernilai luhur dengan gebyok ukir tradisional, busana adat pakem, prosesi sakral, dan kuliner khas.',
+    vendorCount: 5,
+    vendorsList: ['Mahligai Adat Kencana (Dekor)', 'Kraton Heritage Culinary', 'Sanggar Kusuma Busana Adat', 'Lumina Cinematic Wedding', 'Ki Ageng Panatacara'],
+    inclusions: {
+      dekorasi: ['Pelaminan Adat Tradisional 8-10m (Gebyok / Siger / Minang)', 'Dekorasi Janur Kuning Kembar Mayang & Bunga Melati Asli', 'Gate Pintu Masuk Adat & Area Siraman / Sungkeman', 'Set Meja Akad Nikah Tradisional'],
+      catering: ['Prasmanan 350 porsi Menu Nusantara', '3 Food Stalls Tradisional @150 porsi (Sate Ayam, Bakso Malang, Es Cendol)', 'Gubukan Kudapan Tradisional & Rebusan'],
+      attire: ['Tata Rias Adat Pakem (Paes Ageng / Siger / Suntiang / Batak)', '2 Pasang Busana Pengantin Adat (Bludru / Songket Emas)', 'Busana Lengkap 4 Orang Tua Pengantin', 'Rias 4 Pagar Ayu & 4 Pagar Bagus'],
+      dokumentasi: ['2 Fotografer + 2 Videografer Liputan Khusus Adat', 'Dokumentasi Upacara Siraman / Midodareni / Pengajian & Hari H', '1 Teaser Video 1 Menit + 15 Menit Dokumenter Adat', '1 Album Eksklusif Cetak Kulit 25 Halaman'],
+      entertainment: ['Pemandu Upacara Adat Senior & Pemandu Sungkeman', 'Musik Tradisional Gamelan / Kecapi Suling Pengiring', 'Sound System 5000W'],
+      organizer: ['8 Kru Wedding Organizer Berpengalaman Adat', 'Koordinasi Panitia Keluarga & Sesepuh Adat', 'Master Rundown Adat Detil']
+    }
+  },
+  {
+    id: 4,
+    name: 'Royal Wedding',
+    price: 75000000,
+    category: 'Luxury Ballroom (>500 Tamu)',
+    guestCapacity: 'Hingga 500 tamu',
+    concept: 'Classic & Luxurious',
+    image: 'assets/royal-wedding.png',
+    accentColor: '#b68b91',
+    description: 'Paket pernikahan megah grand ballroom dengan dekorasi bunga segar berlimpah, live band orchestra, catering premium, dan koordinasi VIP.',
+    vendorCount: 6,
+    vendorsList: ['Royal Blossom Decor', 'Medina Royal Catering', 'Bennu Artistry Team', 'The Leonardi & Calia Team', 'Batavia Symphony Band', 'Alphi MC & Associates'],
+    inclusions: {
+      dekorasi: ['Grand Floral Stage 10-12 meter Bunga Segar Pilihan', 'Grand Entrance Gate & Chandelier Kristal Mewah', 'Gazebo Karpet Merah / Rose Gold Aisles', 'VIP Round Table Floral Centerpiece & Custom Photobooth'],
+      catering: ['Prasmanan 500 porsi Menu Premium International & Nusantara', '4 Live Food Stalls Favorit @200 porsi (Daging Panggang, Laksa, Pasta, Es Krim)', 'Dessert Table Fontaine & Aneka Puding'],
+      attire: ['MUA Senior Celebrity Stylist untuk Pengantin Wanita', '2 Gaun Pengantin Internasional / Modern Luxury', '2 Jas Groom Tailored Fit', 'Rias & Busana 4 Orang Tua & 6 Penerima Tamu'],
+      dokumentasi: ['3 Fotografer + 2 Videografer + Drone 4K', 'Same Day Edit (SDE) Video Ditayangkan saat Resepsi', '2 Album Leather Box Eksklusif & All Files Flashdisk Mewah', 'Liputan Cinematic 4K Film 15-20 Menit'],
+      entertainment: ['Mini Chamber Orchestra / Full Band Romantic Top 40', 'Bilingual Wedding MC Ternama', 'Sound System 8000W + Moving Beam Lighting'],
+      organizer: ['10 Kru Profesional Wedding Organizer EverAfter', 'Head Coordinator & Dedicated Assistant Pengantin', 'VIP Guest Protocol & Digital Rundown']
+    }
+  },
+  {
+    id: 5,
+    name: 'Modern Luxury',
+    price: 90000000,
+    category: 'Luxury Ballroom (>500 Tamu)',
+    guestCapacity: 'Hingga 500 tamu',
+    concept: 'Modern & Elegant',
+    image: 'assets/modern-luxury.png',
+    accentColor: '#7d879c',
+    description: 'Perayaan pernikahan ultra-modern dengan kinetic lighting, stage akrilik cermin, fine dining fusion, special effects pyro, dan layanan concierge.',
+    vendorCount: 6,
+    vendorsList: ['Vespera Concept & Lighting', 'Lavender Gourmet & Banquet', 'Bennu Artistry & Glam Team', 'The Leonardi & Calia Team', 'Batavia Symphony & Orchestra', 'Alphi MC & Associates'],
+    inclusions: {
+      dekorasi: ['Mirror Carpet & Glass Stage 12 meter', 'Kinetic Lighting Installation, LED Tunnel of Lights & Hanging Florals', 'Contemporary Lounge Seating untuk VIP Tamu', 'Exclusive Interactive 360 Photobooth Area'],
+      catering: ['Prasmanan Fine Dining 500 porsi Western & Asian Gourmet', '5 Premium Food Stalls (Wagyu Roast Beef, Salmon Wellington, Peking Duck, Crepes Suzette, Artisanal Mocktail)', 'Gourmet Dessert Display & Coffee Bar'],
+      attire: ['Haute Couture Designer Wedding Gown Rental', 'Bespoke Tuxedo Groom dari Desainer Ternama', 'High Fashion Flawless Makeup & Retouch Unlimited', 'Styling Busana 4 Orang Tua & 8 Bestmen/Bridesmaids'],
+      dokumentasi: ['Cinema Director + 3 Cinematographers + 2 Photographers', 'Dokumentasi Cinematic Full 4K HDR', '360 Video Booth untuk Tamu Undangan', '2 Coffee Table Photo Books + Video Frame Box'],
+      entertainment: ['Full Jazz Band & String Quartet Ensembles', 'Special Effects: Dry Ice Fog, Confetti Cannons, Sparkular Pyrotechnics', 'Audio Concert Sound System 10.000W'],
+      organizer: ['12 Kru Wedding Organizer VIP Concierge EverAfter', 'Private Assistant Khusus Mempelai & Keluarga Inti', 'Full Technical Direction dari H-60']
+    }
+  },
+  {
+    id: 6,
+    name: 'Rustic Botanical Intimate',
+    price: 35000000,
+    category: 'Intimate (<200 Tamu)',
+    guestCapacity: 'Hingga 150 tamu',
+    concept: 'Warm, Earthy & Botanical',
+    image: 'assets/garden-party.png',
+    accentColor: '#8a9a68',
+    description: 'Pernikahan intimate hangat bernuansa kayu alami, pampas grass, dan dedaunan eucalyptus dengan konsep santap malam ramah keluarga.',
+    vendorCount: 5,
+    vendorsList: ['Gardenia Rustic Florist', 'Selera Rasa Catering', 'Aura Beauty Studio', 'LensCraft Moments', 'Soulmate Acoustic Ensemble'],
+    inclusions: {
+      dekorasi: ['Backdrop Kayu Solid & Dried Palm Pampas 5 meter', 'Meja Panjang Perjamuan Kayu (Long Table) dengan Runner Bunga', 'Hanging Edison Lightings & Lilin Aroma Terapi', 'Wooden Welcome Sign & Guestbook Table'],
+      catering: ['Prasmanan 150 porsi BBQ Grill & Nusantara Delights', 'BBQ Corner Live Cooking (Satay & Sausages)', 'Mocktail Tropical & Fresh Fruit Juice Bar'],
+      attire: ['Natural Glowing Makeup Pengantin & Hairdo Modern', 'Gaun Pengantin Renda Boho / Simple Sleek & Suit Groom', 'Rias 2 Ibu & 2 Besan'],
+      dokumentasi: ['2 Fotografer + 1 Videografer (Warm Moody Color Grading)', 'Cinematic Highlight Video 3-5 Menit', 'Semua Foto High-Res & 1 Mini Photobook'],
+      entertainment: ['Acoustic Duo (Gitar Akustik & Vokal Manis)', 'Wireless Sound System 3000W'],
+      organizer: ['5 Kru Wedding Organizer EverAfter', 'Rundown Akad & Intimate Dinner Reception', 'Konsultasi Perencanaan Pernikahan']
+    }
+  },
+  {
+    id: 7,
+    name: 'Akad & Intimate Blessing',
+    price: 18000000,
+    category: 'Intimate (<200 Tamu)',
+    guestCapacity: 'Hingga 80 tamu',
+    concept: 'Sacred & Warm Blessing',
+    image: 'assets/intimate-wedding.png',
+    accentColor: '#caa35e',
+    description: 'Fokus pada kesakralan prosesi akad nikah atau pemberkatan pernikahan dengan dekorasi meja ijab elegan dan jamuan intim keluarga.',
+    vendorCount: 4,
+    vendorsList: ['Bella Fleur Atelier', 'Selera Rasa Catering', 'Glow Glam by Siska', 'LensCraft Moments'],
+    inclusions: {
+      dekorasi: ['Set Meja Akad Nikah / Altar Pemberkatan Bunga Segar', 'Mini Pelaminan Akad 3-4 meter Elegan', '50 Kursi Tiffany dengan Pita Satin', 'Kotak Hantaran & Welcome Board'],
+      catering: ['Prasmanan 80 porsi Masakan Nusantara Nikmat', 'Coffee Break & Jajanan Tradisional', 'Free Flow Air Mineral & Teh Hangat'],
+      attire: ['1x Tata Rias Akad Nikah / Pemberkatan Pengantin Wanita', '1 Pasang Busana Akad Pengantin', 'Makeup Natural 2 Ibu Pengantin'],
+      dokumentasi: ['1 Fotografer + 1 Videografer (4 Jam Acara)', 'Video Teaser Akad 1 Menit', '100+ Foto Terpilih Google Drive'],
+      entertainment: ['Sound System 2000W + 2 Mic Wireless untuk Penghulu / Pendeta', 'Operator Musik Pengiring Akad'],
+      organizer: ['4 Kru Wedding Organizer On-The-Day', 'Pemandu Acara Akad Nikah / MC Akad', 'Pendampingan Ijab Kabul']
+    }
+  },
+  {
+    id: 8,
+    name: 'Royal Adat Nusantara',
+    price: 85000000,
+    category: 'Traditional Adat',
+    guestCapacity: 'Hingga 600 tamu',
+    concept: 'Majestic Royal Heritage',
+    image: 'assets/traditional-wedding.png',
+    accentColor: '#a15349',
+    description: 'Kemegahan prosesi adat agung keraton nusantara berkapasitas besar dengan tata rias pakem luhur, tarian kirab budaya, dan jamuan ningrat.',
+    vendorCount: 6,
+    vendorsList: ['Mahligai Adat Kencana', 'Kraton Heritage Culinary', 'Sanggar Kusuma Busana Adat', 'Lumina Cinematic Wedding', 'Ki Ageng Panatacara', 'Alphi MC & Associates'],
+    inclusions: {
+      dekorasi: ['Pelaminan Ukir Megah 12 meter Ornamen Sepuh Emas Adat', 'Gate Pintu Gerbang Keraton & Gazebo Adat', 'Tenda Plafon VIP / Ballroom Draping Mewah', 'Area Upacara Panggih / Pasambahan Lengkap'],
+      catering: ['Prasmanan 600 porsi Menu Ningrat Nusantara & Oriental', '5 Food Stalls Tradisional Unggulan @200 porsi (Kambing Guling, Empal Gentong, Tengkleng, Siomay, Es Dawet)', 'Gubukan Wedang Tradisional'],
+      attire: ['Tata Rias Adat Paes / Siger / Suntiang Emas Murni Asli', '2x Ganti Busana Pengantin Adat (Akad & Kirab Resepsi)', 'Busana Lengkap 4 Orang Tua, 4 Besan, & 8 Pagar Ayu/Bagus'],
+      dokumentasi: ['3 Fotografer + 2 Videografer + Drone 4K Dokumentasi Adat Lengkap', 'Liputan Rangkaian Acara H-1 (Pengajian, Siraman, Midodareni/Malam Bainai)', '2 Photobook Kulit Eksklusif 30 Halaman + Same Day Edit Video'],
+      entertainment: ['Kesenian Tari Tradisional Kirab Penyambutan Pengantin', 'Pemandu Adat Senior & MC Bintang', 'Alat Musik Tradisional Pengiring Live & Sound 8000W'],
+      organizer: ['10 Kru Senior Wedding Organizer EverAfter', 'Protokoler Tamu VVIP & Koordinasi Tokoh Adat', 'Buku Panduan Adat Keluarga & Master Rundown']
+    }
+  }
+];
+
+const defaultDemo = {
+  clients: [
+    { id: 1, name: 'Nadia Putri', phone: '0812-3456-7890', email: 'nadia@email.com', date: '2026-12-12', package: 'Royal Wedding', status: 'Confirmed' },
+    { id: 2, name: 'Rizky & Amel', phone: '0821-7788-9900', email: 'rizky@email.com', date: '2026-12-20', package: 'Intimate Wedding', status: 'Pending' },
+    { id: 3, name: 'Dinda Maharani', phone: '0856-1122-3344', email: 'dinda@email.com', date: '2027-01-08', package: 'Garden Party', status: 'Confirmed' },
+    { id: 4, name: 'Fajar & Sinta', phone: '0813-5555-1212', email: 'fajar@email.com', date: '2027-01-15', package: 'Traditional Wedding', status: 'Pending' },
+    { id: 5, name: 'Kevin & Clarissa', phone: '0811-2244-6688', email: 'kevin@email.com', date: '2027-02-14', package: 'Modern Luxury', status: 'Confirmed' }
+  ],
+  events: [
+    { id: 1, title: 'The Wedding of Nadia & Arif', client: 'Nadia Putri', date: '2026-12-12', venue: 'Grand Ballroom Jakarta', status: 'Confirmed', completion: 'Belum Selesai' },
+    { id: 2, title: 'Rizky & Amel Wedding', client: 'Rizky & Amel', date: '2026-12-20', venue: 'The Garden Glasshouse', status: 'Pending', completion: 'Belum Selesai' },
+    { id: 3, title: 'Dinda & Bima Celebration', client: 'Dinda Maharani', date: '2027-01-08', venue: 'Aston Hotel Bekasi', status: 'Confirmed', completion: 'Selesai' },
+    { id: 4, title: 'Fajar & Sinta Royal Adat', client: 'Fajar & Sinta', date: '2027-01-15', venue: 'Balai Samudera Kelapa Gading', status: 'Pending', completion: 'Belum Selesai' }
+  ],
+  packages: defaultPackages,
+  vendors: defaultVendors,
+  payments: [
+    { id: 1, client: 'Nadia Putri', amount: 37500000, date: '2026-10-20', method: 'Transfer Bank', status: 'Paid' },
+    { id: 2, client: 'Rizky & Amel', amount: 12500000, date: '2026-11-02', method: 'Transfer Bank', status: 'Pending' },
+    { id: 3, client: 'Dinda Maharani', amount: 22500000, date: '2026-11-04', method: 'E-Wallet', status: 'Paid' },
+    { id: 4, client: 'Kevin & Clarissa', amount: 45000000, date: '2026-11-06', method: 'Transfer Bank', status: 'Paid' }
+  ],
+  checklist: [
+    { id: 1, phase: 'H-90 (3 Bulan)', title: 'Penetapan budget & pemilihan paket wedding', done: true, pic: 'EverAfter & Klien' },
+    { id: 2, phase: 'H-90 (3 Bulan)', title: 'Booking gedung / venue & catering rekanan', done: true, pic: 'EverAfter WO' },
+    { id: 3, phase: 'H-60 (2 Bulan)', title: 'Fitting pertama busana pengantin & orang tua', done: true, pic: 'Sanggar / MUA' },
+    { id: 4, phase: 'H-60 (2 Bulan)', title: 'Review konsep dekorasi & sample fresh florals', done: false, pic: 'Vendor Dekor' },
+    { id: 5, phase: 'H-60 (2 Bulan)', title: 'Penyusunan daftar tamu & cetak undangan / e-invitation', done: false, pic: 'Klien' },
+    { id: 6, phase: 'H-30 (1 Bulan)', title: 'Technical Meeting (TM) akbar seluruh vendor di venue', done: false, pic: 'EverAfter WO' },
+    { id: 7, phase: 'H-30 (1 Bulan)', title: 'Finalisasi susunan master rundown & songlist romantic', done: false, pic: 'MC & Band' },
+    { id: 8, phase: 'H-14 (2 Minggu)', title: 'Fitting final busana & konfirmasi porsi catering fix', done: false, pic: 'Klien & Catering' },
+    { id: 9, phase: 'H-7 (1 Minggu)', title: 'Konfirmasi kehadiran VIP & layout seating chart', done: false, pic: 'EverAfter WO' },
+    { id: 10, phase: 'H-1 (H-1 Acara)', title: 'Gladi bersih / rehearsal & serah terima barang mahar/cincin', done: false, pic: 'Seluruh Tim' },
+    { id: 11, phase: 'Hari-H', title: 'Eksekusi rundown, pendampingan akad & resepsi hingga selesai', done: false, pic: 'Tim WO On-The-Day' }
+  ]
+};
+
+// ==========================================
+// STATE MANAGEMENT & DATA SYNC
+// ==========================================
+let db = JSON.parse(localStorage.getItem('everafter_db') || 'null') || defaultDemo;
+
+// Migrate / Enrich legacy localStorage
+if (!db.vendors || db.vendors.length === 0) {
+  db.vendors = defaultVendors;
+}
+if (!db.checklist || db.checklist.length === 0) {
+  db.checklist = defaultDemo.checklist;
+}
+if (!db.packages || db.packages.length < 8) {
+  defaultPackages.forEach(dp => {
+    const existing = db.packages ? db.packages.find(p => p.name.toLowerCase() === dp.name.toLowerCase()) : null;
+    if (!existing) {
+      if (!db.packages) db.packages = [];
+      db.packages.push(dp);
+    } else {
+      if (!existing.inclusions) existing.inclusions = dp.inclusions;
+      if (!existing.guestCapacity) existing.guestCapacity = dp.guestCapacity;
+      if (!existing.category) existing.category = dp.category;
+      if (!existing.image) existing.image = dp.image;
+      if (!existing.vendorsList) existing.vendorsList = dp.vendorsList;
+    }
+  });
+}
+db.events.forEach(e => { if(!e.completion) e.completion = 'Belum Selesai'; });
+function save() { localStorage.setItem('everafter_db', JSON.stringify(db)); }
+
+// ==========================================
+// N8N SYNC CLIENT
+// API KEY TIDAK BOLEH DITARUH DI HTML.
+// Secret hanya disimpan di server/.env.
+// ==========================================
+const EVERAFTER_API_BASE = 'http://127.0.0.1:3000';
+
+async function sendToN8n(action, category, record, options = {}) {
+  const { showNotice = true } = options;
+  try {
+    const response = await fetch(`${EVERAFTER_API_BASE}/api/n8n/dispatch`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action,
+        category,
+        record,
+        source: 'EverAfter Wedding Organizer',
+        occurredAt: new Date().toISOString()
+      }),
+      signal: AbortSignal.timeout(15000)
+    });
+
+    const raw = await response.text();
+    let result = {};
+    try { result = raw ? JSON.parse(raw) : {}; } catch (_) { result = { error: raw }; }
+
+    if (!response.ok || result.success !== true) {
+      const message = result.details || result.error || `HTTP ${response.status}`;
+      console.error('Sinkronisasi n8n gagal:', response.status, result);
+      if (showNotice) showToast(`Data tersimpan di website, tetapi gagal dikirim ke Google Sheets: ${message}`, 'danger');
+      return false;
+    }
+
+    console.info(`Sinkronisasi n8n berhasil: ${category} / ${action}`, result);
+    if (showNotice) showToast('Data website berhasil disinkronkan ke Google Sheets.', 'success');
+    return true;
+  } catch (error) {
+    console.error('Tidak dapat menghubungi backend EverAfter:', error);
+    if (showNotice) showToast('Data tersimpan di website, tetapi backend tidak terhubung. Pastikan node server.js berjalan di port 3000.', 'danger');
+    return false;
+  }
+}
+
+save();
+
+// Formatters
+const rupiah = n => 'Rp ' + Number(n).toLocaleString('id-ID');
+const dateFmt = d => {
+  if (!d) return '-';
+  try { return new Date(d + 'T00:00:00').toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }); }
+  catch(e) { return d; }
+};
+const initials = n => String(n).split(' ').filter(Boolean).map(x => x[0]).slice(0, 2).join('').toUpperCase();
+const statusPill = s => `<span class="pill ${s==='Confirmed'?'':s==='Pending'?'pending':'cancel'}">${s==='Confirmed'?'✓ ':s==='Pending'?'⏳ ':''} ${s}</span>`;
+
+// Toast Notification
+function showToast(msg, type='success') {
+  const box = document.getElementById('toastContainer');
+  if (!box) return;
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `<span style="font-size:16px">${type==='success'?'✓':type==='danger'?'✕':'ⓘ'}</span> <div>${msg}</div>`;
+  box.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('fade-out');
+    setTimeout(() => toast.remove(), 260);
+  }, 3200);
+}
+
+// Navigation & Auth
+let page = 'dashboard', editing = null;
+const loginScreen = document.getElementById('loginScreen');
+const app = document.getElementById('app');
+const loginForm = document.getElementById('loginForm');
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+const loginError = document.getElementById('loginError');
+const logout = document.getElementById('logout');
+const pageTitle = document.getElementById('pageTitle');
+const content = document.getElementById('content');
+const togglePwd = document.getElementById('togglePwd');
+const quickLoginBtn = document.getElementById('quickLoginBtn');
+const sidebar = document.getElementById('sidebar');
+const menuToggle = document.getElementById('menuToggle');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const resetDemoBtn = document.getElementById('resetDemoBtn');
+
+// Password Visibility
+togglePwd.onclick = () => {
+  if (password.type === 'password') {
+    password.type = 'text';
+    togglePwd.textContent = '🔒';
+  } else {
+    password.type = 'password';
+    togglePwd.textContent = '👁';
+  }
+};
+
+// Quick Demo Login
+quickLoginBtn.onclick = () => {
+  email.value = 'admin@everafter.com';
+  password.value = 'everafter123';
+  loginScreen.classList.add('hidden');
+  app.classList.remove('hidden');
+  render();
+  showToast('Selamat datang kembali, Wedding Planner!', 'success');
+};
+
+loginForm.addEventListener('submit', e => {
+  e.preventDefault();
+  if (email.value === 'admin@everafter.com' && password.value === 'everafter123') {
+    loginScreen.classList.add('hidden');
+    app.classList.remove('hidden');
+    loginError.textContent = '';
+    render();
+    showToast('Login berhasil! Selamat datang di EverAfter.', 'success');
+  } else {
+    loginError.textContent = 'Email atau password salah. Silakan periksa kembali.';
+  }
+});
+
+logout.onclick = () => {
+  app.classList.add('hidden');
+  loginScreen.classList.remove('hidden');
+  loginForm.reset();
+  showToast('Anda telah keluar dari dashboard.', 'info');
+};
+
+// Mobile Sidebar
+menuToggle.onclick = () => {
+  sidebar.classList.toggle('open');
+  sidebarOverlay.classList.toggle('open');
+};
+sidebarOverlay.onclick = () => {
+  sidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('open');
+};
+
+// Reset Demo Data
+resetDemoBtn.onclick = () => {
+  if (confirm('Pulihkan data demo lengkap (paket & vendor bawaan EverAfter)? Data kustom akan direset.')) {
+    localStorage.removeItem('everafter_db');
+    db = JSON.parse(JSON.stringify(defaultDemo));
+    save();
+    render();
+    showToast('Data demo lengkap berhasil dipulihkan!', 'success');
+  }
+};
+
+// Tes Koneksi n8n & Google Sheets
+const testN8nBtn = document.getElementById('testN8nBtn');
+if (testN8nBtn) {
+  testN8nBtn.onclick = async () => {
+    showToast('Menguji koneksi ke n8n webhook...', 'info');
+    try {
+      const res = await fetch(`${EVERAFTER_API_BASE}/api/n8n/test`);
+      const data = await res.json();
+      if (data.success) {
+        showToast('✓ Sukses! n8n menerima webhook (' + data.status + '). Baris baru masuk ke Google Sheets!', 'success');
+      } else {
+        showToast('Gagal terhubung ke n8n: ' + (data.error || data.details || 'Status ' + data.status), 'danger');
+      }
+    } catch (e) {
+      showToast('Backend belum aktif di port 3000. Jalankan: node server/server.js', 'danger');
+    }
+  };
+}
+
+// Page Switcher
+document.querySelectorAll('.nav button[data-page]').forEach(b => {
+  b.onclick = () => {
+    page = b.dataset.page;
+    document.querySelectorAll('.nav button[data-page]').forEach(x => x.classList.toggle('active', x === b));
+    sidebar.classList.remove('open');
+    sidebarOverlay.classList.remove('open');
+    render();
+  };
+});
+
+function render() {
+  pageTitle.textContent = ({
+    dashboard: 'Dashboard Overview',
+    clients: 'Leads & Clients',
+    events: 'Weddings & Bookings',
+    packages: 'Packages & Proposals',
+    payments: 'Quotes & Payments',
+    tasks: 'Tasks & Checklist',
+    vendors: 'Wedding Packages & Vendor Library',
+    analytics: 'Funnel Analytics'
+  })[page] || 'Dashboard';
+
+  const pages = {
+    dashboard: dashboardPage,
+    clients: clientsPage,
+    events: eventsPage,
+    packages: packagesPage,
+    payments: paymentsPage,
+    tasks: tasksPage,
+    vendors: vendorsPage,
+    analytics: analyticsPage
+  };
+  (pages[page] || dashboardPage)();
+}
+
+// Planner Priority Tasks on Dashboard
+let plannerTasks = [
+  { title: 'Kirim final timeline & rundown ke pengantin', event: 'The Wedding of Nadia & Arif', priority: 'High', due: 'Terlambat', done: false },
+  { title: 'Review dan setujui 3D sketch dekorasi ballroom', event: 'Rizky & Amel Wedding', priority: 'High', due: 'Terlambat', done: false },
+  { title: 'Konfirmasi final porsi catering & food tasting', event: 'Dinda & Bima Celebration', priority: 'Medium', due: '12 Nov', done: false },
+  { title: 'Finalisasi daftar vendor & kontak darurat', event: 'The Wedding of Nadia & Arif', priority: 'Low', due: '15 Nov', done: true },
+  { title: 'Koordinasi busana & fitting orang tua pengantin', event: 'Fajar & Sinta Wedding', priority: 'Medium', due: '18 Nov', done: false }
+];
+
+// ==========================================
+// 1. DASHBOARD PAGE
+// ==========================================
+function dashboardPage() {
+  const paid = db.payments.filter(x => x.status === 'Paid').reduce((a, x) => a + Number(x.amount), 0);
+  const outstanding = db.payments.filter(x => x.status !== 'Paid').reduce((a, x) => a + Number(x.amount), 0);
+  const active = db.events.filter(x => x.status !== 'Cancelled').length;
+  const done = db.events.filter(x => x.completion === 'Selesai').length;
+  const taskPct = Math.round(done / (db.events.length || 1) * 100);
+  const upcoming = db.events.slice().sort((a, b) => a.date.localeCompare(b.date)).slice(0, 3);
+  const overdueTasksCount = plannerTasks.filter(x => !x.done && x.due === 'Terlambat').length;
+
+  const hr = new Date().getHours();
+  const greeting = hr < 11 ? 'Selamat Pagi' : hr < 15 ? 'Selamat Siang' : hr < 18 ? 'Selamat Sore' : 'Selamat Malam';
+
+  content.innerHTML = `
+  <div style="margin: 0 0 20px">
+    <div class="eyebrow">${new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase()}</div>
+    <h2 style="font: 600 30px 'Playfair Display'; margin: 4px 0 0; color: #21222b;">${greeting}, Planner EverAfter</h2>
+  </div>
+
+  <div class="panel" style="padding: 16px 20px; margin-bottom: 18px; border-left: 4px solid var(--gold);">
+    <div style="display:flex; align-items:center; gap: 14px">
+      <div class="stat-icon" style="width: 40px; height: 40px; font-size: 19px; background: #faf4e4; color: #946d14;">ⓘ</div>
+      <div style="flex:1">
+        <b style="font-size: 16px; color: #21222b">Action Center & Notifikasi Penting</b>
+        <div class="muted" style="margin-top: 2px">${overdueTasksCount} tugas butuh tindakan segera sebelum technical meeting.</div>
+      </div>
+      <span class="pill pending">${overdueTasksCount} Overdue</span>
+    </div>
+    ${overdueTasksCount > 0 ? `
+    <div style="margin-top: 13px; border: 1px solid #fae1e1; background: #fffaf9; border-radius: 9px; padding: 11px 14px; color: #a43029; font-size: 12.5px; display: flex; justify-content: space-between; align-items: center">
+      <span><b>! &nbsp; ${overdueTasksCount} timeline pernikahan mendekati hari-H</b> — Segera selesaikan checklist persiapan.</span>
+      <button class="small-btn danger" onclick="page='tasks';render()" style="cursor:pointer">Buka Checklist ›</button>
+    </div>` : ''}
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-top">Active Weddings <span class="stat-icon">♙</span></div>
+      <strong>${active}</strong>
+      <small>Pernikahan dalam koordinasi</small>
+    </div>
+    <div class="stat">
+      <div class="stat-top">Collected <span class="stat-icon" style="background:#eaf7f1;color:#278052">▣</span></div>
+      <strong style="font-size:24px; color: #278052">${rupiah(paid)}</strong>
+      <small>Total pembayaran terverifikasi</small>
+    </div>
+    <div class="stat">
+      <div class="stat-top">Outstanding <span class="stat-icon" style="background:#fff6e4;color:#9a741b">◇</span></div>
+      <strong style="font-size:24px; color: #9a741b">${rupiah(outstanding)}</strong>
+      <small>Tagihan menunggu pelunasan</small>
+    </div>
+    <div class="stat">
+      <div class="stat-top">Completion Rate <span class="stat-icon" style="background:#edf4fc;color:#2c6fb5">✓</span></div>
+      <strong>${taskPct}%</strong>
+      <small>${done} dari ${db.events.length} acara terlaksana</small>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <div style="display:grid; gap: 18px; align-content: start">
+      <div class="panel">
+        <h3>↗ &nbsp; Ringkasan Progres & Keuangan</h3>
+        <div style="display:flex; justify-content:space-between; font-size:12.5px; margin: 16px 0 8px">
+          <span style="font-weight: 500">Wedding Completion Progress</span>
+          <b>${taskPct}%</b>
+        </div>
+        <div style="height: 8px; background: #f0eee9; border-radius: 10px; overflow: hidden">
+          <div style="width: ${taskPct}%; height: 100%; background: var(--gold); border-radius: 10px; transition: width 0.4s ease"></div>
+        </div>
+        <div class="muted" style="font-size: 11px; margin-top: 6px">${done} of ${db.events.length} weddings successfully completed</div>
+
+        <div style="display:flex; justify-content:space-between; font-size:12.5px; margin: 20px 0 8px">
+          <span style="font-weight: 500">Invoice Collection Progress</span>
+          <b>${paid + outstanding ? Math.round(paid / (paid + outstanding) * 100) : 0}%</b>
+        </div>
+        <div style="height: 8px; background: #f0eee9; border-radius: 10px; overflow: hidden">
+          <div style="width: ${paid + outstanding ? paid / (paid + outstanding) * 100 : 0}%; height: 100%; background: #278052; border-radius: 10px; transition: width 0.4s ease"></div>
+        </div>
+        <div class="muted" style="font-size: 11px; margin-top: 6px">${rupiah(paid)} collected dari total tagihan ${rupiah(paid + outstanding)}</div>
+
+        <div class="stats" style="grid-template-columns: 1fr 1fr 1fr; margin: 20px 0 0; gap: 10px">
+          <div style="background: #faf8f5; border: 1px solid var(--line); border-radius: 10px; padding: 12px">
+            <b style="font-size: 20px; color: #21222b">${plannerTasks.filter(x => !x.done).length}</b>
+            <div class="muted" style="font-size: 10.5px; margin-top: 2px">Pending Tasks</div>
+          </div>
+          <div style="background: #faf8f5; border: 1px solid var(--line); border-radius: 10px; padding: 12px">
+            <b style="font-size: 20px; color: #21222b">${db.packages.length}</b>
+            <div class="muted" style="font-size: 10.5px; margin-top: 2px">Wedding Packages</div>
+          </div>
+          <div style="background: #faf8f5; border: 1px solid var(--line); border-radius: 10px; padding: 12px">
+            <b style="font-size: 20px; color: #21222b">${db.vendors.length}</b>
+            <div class="muted" style="font-size: 10.5px; margin-top: 2px">Verified Vendors</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px">
+          <h3 style="margin:0">☷ &nbsp; Priority Checklist Planner</h3>
+          <span class="muted" style="font-size: 12px">${plannerTasks.filter(x => !x.done).length} tugas aktif</span>
+        </div>
+        <div style="display:grid; gap: 4px">
+          ${plannerTasks.slice(0, 4).map((t, i) => `
+            <label style="display:flex; align-items:center; gap: 12px; padding: 11px 8px; border-bottom: 1px solid #f2f0ec; cursor: pointer; transition: background 0.15s; border-radius: 6px" onmouseover="this.style.background='#faf8f5'" onmouseout="this.style.background='transparent'">
+              <input type="checkbox" ${t.done ? 'checked' : ''} onchange="plannerTasks[${i}].done=this.checked; showToast(this.checked ? 'Tugas ditandai selesai!' : 'Tugas diaktifkan kembali.', 'info'); dashboardPage()" style="accent-color: var(--gold); width: 17px; height: 17px; cursor: pointer">
+              <span style="flex:1; min-width:0; ${t.done ? 'text-decoration: line-through; opacity: 0.6;' : ''}">
+                <b style="font-size: 13px; font-weight: 500; display:block; color: #232530">${t.title}</b>
+                <small class="muted" style="display:block; margin-top: 3px; font-size: 11px">${t.event}</small>
+              </span>
+              <span class="pill ${t.due === 'Terlambat' ? 'cancel' : 'pending'}" style="font-size: 10px">${t.due}</span>
+              <span class="pill ${t.priority === 'High' ? 'cancel' : 'pending'}" style="font-size: 10px">${t.priority}</span>
+            </label>
+          `).join('')}
+        </div>
+        <div style="text-align: center; margin-top: 14px">
+          <button class="small-btn" onclick="page='tasks';render()">Kelola Semua Checklist Timeline & Acara ›</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid; gap: 18px; align-content: start">
+      <div class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px">
+          <h3 style="margin:0">▣ &nbsp; Upcoming Weddings</h3>
+          <button class="small-btn outline" onclick="page='events';render()">Semua Acara</button>
+        </div>
+        ${upcoming.length ? upcoming.map(e => `
+          <div class="event-row">
+            <div class="stat-icon" style="width: 40px; height: 40px; border-radius: 50%; background: #fbf5e8; color: #8b6716">♡</div>
+            <div class="event-info">
+              <b>${e.title}</b>
+              <small>${dateFmt(e.date)}　•　${e.venue}</small>
+            </div>
+            ${statusPill(e.status)}
+          </div>
+        `).join('') : '<div class="empty">Belum ada jadwal acara mendatang.</div>'}
+      </div>
+
+      <div class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px">
+          <h3 style="margin:0">♡ &nbsp; Wedding Readiness Status</h3>
+          <span class="pill blue">Auto Tracker</span>
+        </div>
+        ${upcoming.map((e, i) => {
+          let pct = [85, 65, 45, 90][i] || 60;
+          return `
+          <div class="event-row">
+            <div style="width: 44px; height: 44px; border-radius: 50%; border: 3.5px solid ${pct >= 75 ? '#278052' : pct >= 55 ? '#b88713' : '#b33930'}; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: ${pct >= 75 ? '#278052' : pct >= 55 ? '#986f16' : '#b33930'}">
+              ${pct}%
+            </div>
+            <div class="event-info">
+              <b>${e.title}</b>
+              <small>${dateFmt(e.date)}　•　Klien: ${e.client}</small>
+            </div>
+            <span class="pill ${pct >= 75 ? '' : pct >= 55 ? 'pending' : 'cancel'}">
+              ${pct >= 75 ? 'Ready On Track' : pct >= 55 ? 'Needs Review' : 'Action Required'}
+            </span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top: 18px">
+    <h3>⚡ Quick Actions & Pintasan Planner</h3>
+    <div class="stats" style="grid-template-columns: repeat(4, 1fr); margin: 0; gap: 12px">
+      <button class="secondary" onclick="openModal('clients')" style="background:#fff; border: 1px solid var(--line-strong); padding: 14px; text-align: left; display: flex; align-items: center; gap: 10px; cursor: pointer">
+        <span style="font-size: 18px; color: var(--gold)">♙</span>
+        <div><b>Tambah Klien</b><div class="muted" style="font-size:10px">Catat lead baru</div></div>
+      </button>
+      <button class="secondary" onclick="openModal('events')" style="background:#fff; border: 1px solid var(--line-strong); padding: 14px; text-align: left; display: flex; align-items: center; gap: 10px; cursor: pointer">
+        <span style="font-size: 18px; color: var(--gold)">♡</span>
+        <div><b>Booking Wedding</b><div class="muted" style="font-size:10px">Buat jadwal acara</div></div>
+      </button>
+      <button class="secondary" onclick="page='vendors';render()" style="background:#fff; border: 1px solid var(--line-strong); padding: 14px; text-align: left; display: flex; align-items: center; gap: 10px; cursor: pointer">
+        <span style="font-size: 18px; color: var(--gold)">♧</span>
+        <div><b>Katalog Vendor</b><div class="muted" style="font-size:10px">${db.vendors.length} vendor rekanan</div></div>
+      </button>
+      <button class="secondary" onclick="openModal('payments')" style="background:#fff; border: 1px solid var(--line-strong); padding: 14px; text-align: left; display: flex; align-items: center; gap: 10px; cursor: pointer">
+        <span style="font-size: 18px; color: var(--gold)">◇</span>
+        <div><b>Input Pembayaran</b><div class="muted" style="font-size:10px">Catat transfer klien</div></div>
+      </button>
+    </div>
+  </div>
+  `;
+}
+
+// ==========================================
+// 2. WEDDING PACKAGES & VENDOR LIBRARY PAGE
+// ==========================================
+let vendorActiveTab = 'packages';
+let pkgFilterCat = 'Semua';
+let pkgSearchQuery = '';
+let vendorFilterCat = 'Semua';
+let vendorSearchQuery = '';
+
+function vendorsPage() {
+  content.innerHTML = `
+  <div class="section-head">
+    <div>
+      <h2>Wedding Packages & Vendor Library</h2>
+      <div class="muted">Koleksi paket pernikahan lengkap dengan pemetaan vendor rekanan resmi, fasilitas, dan inklusi layanan.</div>
+    </div>
+    <div style="display:flex; gap: 8px">
+      <button class="small-btn outline" onclick="openModal('vendors')">＋ Tambah Rekanan Vendor</button>
+      <button class="primary" onclick="openModal('packages')">＋ Tambah Paket Baru</button>
+    </div>
+  </div>
+
+  <div class="view-tabs">
+    <button class="view-tab ${vendorActiveTab === 'packages' ? 'active' : ''}" onclick="vendorActiveTab='packages'; vendorsPage()">
+      <span>▤</span> Paket Wedding Lengkap (${db.packages.length} Paket)
+    </button>
+    <button class="view-tab ${vendorActiveTab === 'vendors' ? 'active' : ''}" onclick="vendorActiveTab='vendors'; vendorsPage()">
+      <span>♧</span> Direktori Rekanan Vendor Resmi (${db.vendors.length} Vendor)
+    </button>
+  </div>
+
+  <div id="vendorTabContent"></div>
+  `;
+
+  if (vendorActiveTab === 'packages') {
+    renderPackagesTab();
+  } else {
+    renderVendorsTab();
+  }
+}
+
+function renderPackagesTab() {
+  const container = document.getElementById('vendorTabContent');
+  if (!container) return;
+
+  const categories = ['Semua', 'Intimate (<200 Tamu)', 'Outdoor & Garden', 'Traditional Adat', 'Luxury Ballroom (>500 Tamu)'];
+  
+  let filtered = db.packages.filter(p => {
+    const matchCat = pkgFilterCat === 'Semua' || p.category === pkgFilterCat;
+    const q = pkgSearchQuery.toLowerCase();
+    const matchQuery = !q || p.name.toLowerCase().includes(q) || (p.description && p.description.toLowerCase().includes(q)) || (p.concept && p.concept.toLowerCase().includes(q));
+    return matchCat && matchQuery;
+  });
+
+  container.innerHTML = `
+  <div class="toolbar">
+    <div class="filter-chips">
+      ${categories.map(c => `
+        <button class="chip ${pkgFilterCat === c ? 'active' : ''}" onclick="pkgFilterCat='${c}'; renderPackagesTab()">
+          ${c} ${c === 'Semua' ? `(${db.packages.length})` : ''}
+        </button>
+      `).join('')}
+    </div>
+    <div class="spacer"></div>
+    <input class="search" placeholder="Cari nama paket, konsep, tamu..." value="${pkgSearchQuery}" oninput="pkgSearchQuery=this.value; renderPackagesTab()">
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; margin-bottom: 24px">
+    ${filtered.map(p => `
+      <div class="package-card">
+        <div class="pkg-img-wrap">
+          <img src="${p.image || 'assets/intimate-wedding.png'}" alt="${p.name}" onerror="this.src='assets/intimate-wedding.png'">
+          <span class="pkg-badge">${p.concept || 'Wedding Package'}</span>
+          <span class="pkg-price-badge">${rupiah(p.price)}</span>
+        </div>
+        <div style="height: 5px; background: ${p.accentColor || '#b88713'}"></div>
+        <div class="pkg-body">
+          <div class="eyebrow" style="color: #927014">${p.category || 'Package'}</div>
+          <h3 class="pkg-title">${p.name}</h3>
+          <p class="pkg-desc">${p.description || 'Paket pernikahan lengkap dengan vendor terbaik dan pendampingan EverAfter.'}</p>
+          
+          <div class="pkg-meta">
+            <span class="pkg-tag">👥 ${p.guestCapacity || 'Kapasitas fleksibel'}</span>
+            <span class="pkg-tag">💐 ${p.vendorCount || (p.vendorsList ? p.vendorsList.length : 5)} Vendor Termasuk</span>
+            <span class="pkg-tag">📋 Tim WO EverAfter</span>
+          </div>
+
+          ${p.vendorsList ? `
+            <div style="background: #faf8f5; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin-bottom: 16px; font-size: 11.5px; color: #58554a">
+              <b style="color: #2b2c34; display:block; margin-bottom: 4px">Vendor Terintegrasi:</b>
+              ${p.vendorsList.slice(0, 3).map(v => `<div>• ${v}</div>`).join('')}
+              ${p.vendorsList.length > 3 ? `<div style="color: var(--gold); font-weight: 600; margin-top: 2px">+ ${p.vendorsList.length - 3} vendor lainnya...</div>` : ''}
+            </div>
+          ` : ''}
+
+          <div class="pkg-actions">
+            <button class="primary" onclick="viewPackageDetail(${p.id})" style="padding: 10px; font-size: 12px">
+              🔍 Detail Vendor & Inklusi
+            </button>
+            <button class="small-btn outline" onclick="copyProposalText(${p.id})" style="justify-content:center; padding: 10px; font-size: 12px">
+              📋 Salin Proposal
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('') || '<div class="empty" style="grid-column: 1/-1">Tidak ada paket pernikahan yang cocok dengan filter.</div>'}
+  </div>
+
+  <div class="panel">
+    <h3>ℹ &nbsp; Panduan Custom Paket & Fleksibilitas Vendor</h3>
+    <p class="muted" style="line-height: 1.7; margin: 0">
+      Seluruh paket pernikahan di atas sudah mencakup vendor terkurasi (Dekorasi, Catering, MUA & Busana, Dokumentasi, Entertainment & Sound, serta Tim Wedding Organizer On-The-Day EverAfter). Planner dapat menyesuaikan upgrade menu catering, kustom dekorasi panggung, atau mengganti rekanan vendor sesuai preferensi dan impian klien.
+    </p>
+  </div>
+  `;
+}
+
+function renderVendorsTab() {
+  const container = document.getElementById('vendorTabContent');
+  if (!container) return;
+
+  const categories = ['Semua', 'Dekorasi', 'Catering', 'MUA & Busana', 'Dokumentasi', 'Entertainment', 'Venue', 'Pemandu Adat'];
+  
+  let filtered = db.vendors.filter(v => {
+    const matchCat = vendorFilterCat === 'Semua' || v.category === vendorFilterCat;
+    const q = vendorSearchQuery.toLowerCase();
+    const matchQuery = !q || v.name.toLowerCase().includes(q) || (v.desc && v.desc.toLowerCase().includes(q)) || (v.location && v.location.toLowerCase().includes(q));
+    return matchCat && matchQuery;
+  });
+
+  const catIcons = {
+    'Dekorasi': '🌸',
+    'Catering': '🍽️',
+    'MUA & Busana': '💄',
+    'Dokumentasi': '📸',
+    'Entertainment': '🎵',
+    'Venue': '🏛️',
+    'Pemandu Adat': '👘'
+  };
+
+  container.innerHTML = `
+  <div class="toolbar">
+    <div class="filter-chips">
+      ${categories.map(c => `
+        <button class="chip ${vendorFilterCat === c ? 'active' : ''}" onclick="vendorFilterCat='${c}'; renderVendorsTab()">
+          ${c} ${c === 'Semua' ? `(${db.vendors.length})` : ''}
+        </button>
+      `).join('')}
+    </div>
+    <div class="spacer"></div>
+    <input class="search" placeholder="Cari nama vendor, layanan, lokasi..." value="${vendorSearchQuery}" oninput="vendorSearchQuery=this.value; renderVendorsTab()">
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 18px; margin-bottom: 24px">
+    ${filtered.map(v => `
+      <div class="vendor-card">
+        <div class="vendor-head">
+          <div class="vendor-icon">${catIcons[v.category] || '♧'}</div>
+          <div class="vendor-title">
+            <div style="display:flex; justify-content:space-between; align-items:center">
+              <b>${v.name}</b>
+              <span class="pill ${v.status === 'Exclusive Partner' ? '' : v.status === 'Official Partner' ? 'blue' : 'pending'}" style="font-size: 10px">${v.status || 'Verified'}</span>
+            </div>
+            <div class="vendor-meta">
+              <span style="color: #b88713; font-weight:700">★ ${v.rating || '4.9'}</span>
+              <span>(${v.reviews || 40} ulasan)</span>
+              <span>• ${v.category}</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="vendor-desc">${v.desc || 'Vendor rekanan resmi terpercaya dengan portfolio pernikahan berkualitas tinggi.'}</p>
+        
+        <div style="font-size: 11.5px; color: #696b79; margin-bottom: 12px; display:flex; flex-direction:column; gap: 3px">
+          <div>📍 ${v.location || 'Jabodetabek'}</div>
+          <div>📷 ${v.instagram || '@everafter.partner'}</div>
+        </div>
+
+        ${v.usedIn && v.usedIn.length ? `
+          <div class="vendor-used">
+            <span style="font-weight: 600; color: #433c2a">Tersedia di paket:</span> ${v.usedIn.join(', ')}
+          </div>
+        ` : ''}
+
+        <div class="vendor-foot">
+          <a href="https://wa.me/62${(v.contact||'81234567890').replace(/[^0-9]/g,'')}" target="_blank" class="small-btn" style="text-decoration:none">
+            💬 Hubungi Vendor
+          </a>
+          <div class="actions">
+            <button class="small-btn outline" onclick="editItem('vendors', ${v.id})">Edit</button>
+            <button class="small-btn danger" onclick="deleteItem('vendors', ${v.id})">Hapus</button>
+          </div>
+        </div>
+      </div>
+    `).join('') || '<div class="empty" style="grid-column: 1/-1">Tidak ada rekanan vendor yang sesuai pencarian.</div>'}
+  </div>
+  `;
+}
+
+// Modal Detail Paket
+let activePackageForDetail = null;
+
+function viewPackageDetail(pkgId) {
+  const p = db.packages.find(x => x.id === pkgId);
+  if (!p) return;
+  activePackageForDetail = p;
+
+  const pkgModalBg = document.getElementById('packageModalBg');
+  const pkgModalTitle = document.getElementById('pkgModalTitle');
+  const pkgModalContent = document.getElementById('pkgModalContent');
+
+  pkgModalTitle.textContent = p.name + ' — Inklusi Lengkap & Vendor';
+
+  const inc = p.inclusions || {
+    dekorasi: ['Pelaminan & Backdrop Elegan', 'Standing Flowers & Centerpieces', 'Welcome Gate & Photobooth Area'],
+    catering: ['Prasmanan Lengkap & Pilihan Stall Favorit', 'Dessert Corner & Free Flow Drink'],
+    attire: ['Rias Pengantin Akad & Resepsi', 'Busana Pengantin & 2 Ibu Besan'],
+    dokumentasi: ['Fotografer & Videografer Profesional', 'All Files Drive & Cinematic Video'],
+    entertainment: ['Live Acoustic Music / Band & MC Wedding', 'Sound System Berdaya Sesuai Venue'],
+    organizer: ['Tim Kru EverAfter On-The-Day Lengkap', 'Rundown Master & Buku Panduan']
+  };
+
+  pkgModalContent.innerHTML = `
+  <div style="position:relative; border-radius: 12px; overflow: hidden; margin-bottom: 18px; max-height: 220px">
+    <img src="${p.image || 'assets/intimate-wedding.png'}" alt="${p.name}" style="width: 100%; height: 220px; object-fit: cover" onerror="this.src='assets/intimate-wedding.png'">
+    <div style="position:absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 60%); display:flex; align-items:flex-end; padding: 18px; color: white">
+      <div>
+        <div style="font-size: 11px; letter-spacing: 1.5px; color: #ebd19e; font-weight: 700; text-transform: uppercase">${p.concept || 'Wedding Package'}</div>
+        <h2 style="font: 600 26px 'Playfair Display'; margin: 4px 0 0; color: #fff">${p.name}</h2>
+      </div>
+      <div style="margin-left: auto; text-align: right">
+        <div style="font-size: 11px; color: #e0ded9">Estimasi Biaya Paket</div>
+        <div style="font: 700 24px 'DM Sans'; color: #f5d487">${rupiah(p.price)}</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px">
+    <span class="pill">${p.category || 'Package'}</span>
+    <span class="pill blue">👥 ${p.guestCapacity || 'Kapasitas Tamu Fleksibel'}</span>
+    <span class="pill pending">💐 ${p.vendorCount || 5} Vendor Resmi</span>
+  </div>
+
+  <p class="muted" style="line-height: 1.6; margin-bottom: 18px">${p.description || ''}</p>
+
+  <h4 style="font-size: 14px; font-weight: 700; color: #232530; margin: 18px 0 10px; text-transform: uppercase; letter-spacing: 0.8px">
+    Rincian Inklusi Vendor & Layanan
+  </h4>
+
+  <div class="inclusions-grid">
+    <div class="inc-card">
+      <div class="inc-head"><span>🌸</span> Vendor Dekorasi & Florist</div>
+      <ul class="inc-list">
+        ${(inc.dekorasi || []).map(x => `<li>${x}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="inc-card">
+      <div class="inc-head"><span>🍽️</span> Vendor Catering & Jamuan</div>
+      <ul class="inc-list">
+        ${(inc.catering || []).map(x => `<li>${x}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="inc-card">
+      <div class="inc-head"><span>💄</span> Vendor MUA & Tata Busana</div>
+      <ul class="inc-list">
+        ${(inc.attire || []).map(x => `<li>${x}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="inc-card">
+      <div class="inc-head"><span>📸</span> Vendor Foto & Sinematografi</div>
+      <ul class="inc-list">
+        ${(inc.dokumentasi || []).map(x => `<li>${x}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="inc-card">
+      <div class="inc-head"><span>🎵</span> Entertainment, MC & Audio</div>
+      <ul class="inc-list">
+        ${(inc.entertainment || []).map(x => `<li>${x}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="inc-card">
+      <div class="inc-head"><span>📋</span> Layanan WO EverAfter Team</div>
+      <ul class="inc-list">
+        ${(inc.organizer || []).map(x => `<li>${x}</li>`).join('')}
+      </ul>
+    </div>
+  </div>
+
+  ${p.vendorsList ? `
+    <div style="background: #faf8f5; border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-top: 14px">
+      <b style="font-size: 13px; color: #21222b; display: block; margin-bottom: 6px">Vendor Rekanan Terkait Paket Ini:</b>
+      <div style="font-size: 12.5px; color: #585966; line-height: 1.7">
+        ${p.vendorsList.join(' • ')}
+      </div>
+    </div>
+  ` : ''}
+  `;
+
+  pkgModalBg.classList.remove('hidden');
+}
+
+function closePackageModal() {
+  document.getElementById('packageModalBg').classList.add('hidden');
+}
+document.getElementById('closePkgModal').onclick = closePackageModal;
+document.getElementById('closePkgModalBtn').onclick = closePackageModal;
+document.getElementById('packageModalBg').onclick = e => {
+  if (e.target === document.getElementById('packageModalBg')) closePackageModal();
+};
+
+function copyProposalText(pkgId) {
+  const p = db.packages.find(x => x.id === pkgId);
+  if (!p) return;
+  const inc = p.inclusions || {};
+  
+  let text = `💍 PENAWARAN PAKET PERNIKAHAN EVERAFTER ORGANIZER
+=======================================
+Paket: ${p.name} (${p.concept || ''})
+Harga: ${rupiah(p.price)}
+Kapasitas: ${p.guestCapacity || '-'}
+
+Deskripsi:
+${p.description || ''}
+
+RINCIAN INKLUSI VENDOR:
+🌸 Dekorasi & Florist:
+${(inc.dekorasi || []).map(x => ' - ' + x).join('\n')}
+
+🍽️ Catering & Jamuan:
+${(inc.catering || []).map(x => ' - ' + x).join('\n')}
+
+💄 Tata Rias & Busana:
+${(inc.attire || []).map(x => ' - ' + x).join('\n')}
+
+📸 Dokumentasi Foto & Video:
+${(inc.dokumentasi || []).map(x => ' - ' + x).join('\n')}
+
+🎵 Musik & MC:
+${(inc.entertainment || []).map(x => ' - ' + x).join('\n')}
+
+📋 Layanan Tim Wedding Organizer EverAfter:
+${(inc.organizer || []).map(x => ' - ' + x).join('\n')}
+
+*Catatan: Harga dan vendor dapat disesuaikan dengan konsep dan kebutuhan calon pengantin.
+Hubungi Wedding Planner EverAfter: 0812-3456-7890 | admin@everafter.com`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Proposal ' + p.name + ' berhasil disalin ke clipboard!', 'success');
+  }).catch(() => {
+    showToast('Teks proposal berhasil disalin!', 'success');
+  });
+}
+
+document.getElementById('copyProposalBtn').onclick = () => {
+  if (activePackageForDetail) copyProposalText(activePackageForDetail.id);
+};
+
+document.getElementById('usePackageBtn').onclick = () => {
+  if (!activePackageForDetail) return;
+  closePackageModal();
+  openModal('clients', {
+    name: '',
+    phone: '',
+    email: '',
+    date: new Date(Date.now() + 60*24*3600*1000).toISOString().split('T')[0],
+    package: activePackageForDetail.name,
+    status: 'Pending'
+  });
+};
+
+// ==========================================
+// 3. PACKAGES & PROPOSALS PAGE (CRUD & VIEWS)
+// ==========================================
+let packagesViewMode = 'cards';
+
+function packagesPage(filter='') {
+  const rows = db.packages.filter(o => Object.values(o).join(' ').toLowerCase().includes(filter.toLowerCase()));
+
+  content.innerHTML = `
+  <div class="section-head">
+    <div>
+      <h2>Packages & Proposals Management</h2>
+      <div class="muted">Kelola master paket pernikahan, estimasi harga, deskripsi, dan inklusi layanan.</div>
+    </div>
+    <div style="display:flex; gap: 8px">
+      <div class="filter-chips">
+        <button class="chip ${packagesViewMode === 'cards' ? 'active' : ''}" onclick="packagesViewMode='cards'; packagesPage('${filter}')">☷ Tampilan Kartu</button>
+        <button class="chip ${packagesViewMode === 'table' ? 'active' : ''}" onclick="packagesViewMode='table'; packagesPage('${filter}')">▤ Tampilan Tabel</button>
+      </div>
+      <button class="primary" id="addPackageBtn">＋ Tambah Paket</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <input class="search" id="pkgSearchBox" placeholder="Cari nama paket, kapasitas..." value="${filter}">
+    <div class="spacer"></div>
+    <span class="muted">${rows.length} paket terdaftar</span>
+  </div>
+
+  ${packagesViewMode === 'cards' ? `
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; margin-bottom: 24px">
+      ${rows.map(p => `
+        <div class="package-card">
+          <div class="pkg-img-wrap" style="height: 170px">
+            <img src="${p.image || 'assets/intimate-wedding.png'}" alt="${p.name}" onerror="this.src='assets/intimate-wedding.png'">
+            <span class="pkg-badge">${p.category || 'Package'}</span>
+            <span class="pkg-price-badge">${rupiah(p.price)}</span>
+          </div>
+          <div class="pkg-body" style="padding: 16px">
+            <h3 class="pkg-title" style="font-size: 18px; margin: 0 0 6px">${p.name}</h3>
+            <p class="pkg-desc" style="font-size: 12px; margin-bottom: 12px">${p.description || ''}</p>
+            <div style="font-size: 11px; color: #727480; margin-bottom: 14px">
+              👥 ${p.guestCapacity || '-'}　•　💐 ${p.vendorCount || 5} Vendor
+            </div>
+            <div class="actions" style="margin-top: auto">
+              <button class="small-btn" onclick="viewPackageDetail(${p.id})">🔍 Inklusi</button>
+              <button class="small-btn outline" onclick="editItem('packages', ${p.id})">Edit</button>
+              <button class="small-btn danger" onclick="deleteItem('packages', ${p.id})">Hapus</button>
+            </div>
+          </div>
+        </div>
+      `).join('') || '<div class="empty" style="grid-column: 1/-1">Paket tidak ditemukan.</div>'}
+    </div>
+  ` : `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Paket</th>
+            <th>Harga</th>
+            <th>Kapasitas</th>
+            <th>Deskripsi</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(o => `
+            <tr>
+              <td><b>${o.name}</b><small class="muted" style="display:block; margin-top:2px">${o.concept || o.category || ''}</small></td>
+              <td><b style="color: #926f16">${rupiah(o.price)}</b></td>
+              <td>${o.guestCapacity || '-'}</td>
+              <td style="max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${o.description || '-'}</td>
+              <td>
+                <div class="actions">
+                  <button class="small-btn" onclick="viewPackageDetail(${o.id})">Inklusi</button>
+                  <button class="small-btn outline" onclick="editItem('packages', ${o.id})">Edit</button>
+                  <button class="small-btn danger" onclick="deleteItem('packages', ${o.id})">Hapus</button>
+                </div>
+              </td>
+            </tr>
+          `).join('') || '<tr><td colspan="5" class="empty">Paket tidak ditemukan.</td></tr>'}
+        </tbody>
+      </table>
+    </div>
+  `}
+  `;
+
+  document.getElementById('addPackageBtn').onclick = () => openModal('packages');
+  document.getElementById('pkgSearchBox').oninput = e => packagesPage(e.target.value);
+}
+
+// ==========================================
+// 4. TASKS & CHECKLIST PAGE
+// ==========================================
+function tasksPage() {
+  const finished = db.events.filter(e => e.completion === 'Selesai').length;
+  const total = db.events.length;
+  const checklist = db.checklist || defaultDemo.checklist;
+  const chkDone = checklist.filter(x => x.done).length;
+  const chkPct = Math.round(chkDone / (checklist.length || 1) * 100);
+
+  content.innerHTML = `
+  <div class="section-head">
+    <div>
+      <h2>Tasks & Wedding Preparation Checklist</h2>
+      <div class="muted">Pantau timeline persiapan pernikahan, technical meeting, dan status penyelesaian hari-H acara.</div>
+    </div>
+    <button class="primary" onclick="openAddChecklistModal()">＋ Tambah Tugas Timeline</button>
+  </div>
+
+  <div class="stats" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 20px">
+    <div class="stat">
+      <div class="stat-top">Wedding Telah Selesai <span class="stat-icon" style="background:#eaf7f1;color:#278052">✓</span></div>
+      <strong>${finished} / ${total}</strong>
+      <small>Acara yang sukses terlaksana</small>
+    </div>
+    <div class="stat">
+      <div class="stat-top">Acara Dalam Persiapan <span class="stat-icon">⏳</span></div>
+      <strong>${total - finished}</strong>
+      <small>Sedang dalam masa koordinasi</small>
+    </div>
+    <div class="stat">
+      <div class="stat-top">Checklist Timeline Planner <span class="stat-icon" style="background:#edf4fc;color:#2c6fb5">☑</span></div>
+      <strong>${chkPct}%</strong>
+      <small>${chkDone} dari ${checklist.length} persiapan selesai</small>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-bottom: 24px">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px">
+      <h3>☑ &nbsp; Timeline Perencanaan Pernikahan (Milestone Planner)</h3>
+      <span class="pill ${chkPct === 100 ? '' : 'pending'}">${chkDone} Selesai</span>
+    </div>
+
+    <div style="height: 7px; background: #f0eee9; border-radius: 10px; overflow: hidden; margin-bottom: 18px">
+      <div style="width: ${chkPct}%; height: 100%; background: var(--gold); border-radius: 10px; transition: width 0.3s ease"></div>
+    </div>
+
+    <div style="display: grid; gap: 6px">
+      ${checklist.map((item) => `
+        <label style="display:flex; align-items:center; gap: 14px; padding: 11px 12px; background: ${item.done ? '#faf9f6' : '#fff'}; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; transition: all 0.15s">
+          <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem(${item.id})" style="accent-color: var(--gold); width: 18px; height: 18px; cursor: pointer">
+          <span class="pill" style="font-size: 10px; padding: 3px 8px; background: #f1ede4; color: #756241">${item.phase}</span>
+          <span style="flex:1; ${item.done ? 'text-decoration: line-through; opacity: 0.6;' : ''}">
+            <b style="font-size: 13px; color: #232530">${item.title}</b>
+            <small class="muted" style="display:block; margin-top: 2px">PIC: ${item.pic || 'EverAfter'}</small>
+          </span>
+          <button type="button" class="small-btn danger" style="padding: 3px 8px; font-size: 10px" onclick="event.preventDefault(); deleteChecklistItem(${item.id})">Hapus</button>
+        </label>
+      `).join('')}
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>♡ &nbsp; Status Pelaksanaan Hari-H Acara</h3>
+    <div class="table-wrap" style="box-shadow:none">
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Acara</th>
+            <th>Klien</th>
+            <th>Tanggal</th>
+            <th>Lokasi</th>
+            <th>Status Pelaksanaan</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${db.events.map(e => {
+            const done = e.completion === 'Selesai';
+            return `
+            <tr>
+              <td><b>${e.title}</b></td>
+              <td>${e.client}</td>
+              <td>${dateFmt(e.date)}</td>
+              <td>${e.venue}</td>
+              <td>${done ? '<span class="pill">✓ Selesai Terlaksana</span>' : '<span class="pill pending">⏳ Menunggu Acara</span>'}</td>
+              <td>
+                <button class="small-btn ${done ? 'outline' : ''}" onclick="toggleEventCompletion(${e.id})">
+                  ${done ? 'Tandai Belum Selesai' : '✓ Tandai Selesai'}
+                </button>
+              </td>
+            </tr>`;
+          }).join('') || '<tr><td colspan="6" class="empty">Belum ada data acara.</td></tr>'}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  `;
+}
+
+function toggleEventCompletion(id) {
+  const e = db.events.find(x => x.id === id);
+  if (!e) return;
+  e.completion = e.completion === 'Selesai' ? 'Belum Selesai' : 'Selesai';
+  save();
+  sendToN8n('update', 'events', e);
+  showToast('Status acara ' + e.title + ' diperbarui di website.', 'info');
+  render();
+}
+
+function toggleChecklistItem(id) {
+  const item = db.checklist.find(x => x.id === id);
+  if (!item) return;
+  item.done = !item.done;
+  save();
+  sendToN8n('update', 'checklist', item);
+  showToast(item.done ? 'Milestone diperbarui di website.' : 'Status milestone diperbarui di website.', 'info');
+  tasksPage();
+}
+
+function deleteChecklistItem(id) {
+  if (confirm('Hapus item checklist ini?')) {
+    const deletedItem = db.checklist.find(x => x.id === id);
+    db.checklist = db.checklist.filter(x => x.id !== id);
+    save();
+    if (deletedItem) sendToN8n('delete', 'checklist', deletedItem);
+    showToast('Item checklist dihapus dari website.', 'info');
+    tasksPage();
+  }
+}
+
+function openAddChecklistModal() {
+  const title = prompt('Masukkan nama tugas / milestone timeline:');
+  if (!title) return;
+  const phase = prompt('Fase (misal: H-60, H-30, H-14, H-1, Hari-H):', 'H-30 (1 Bulan)');
+  const pic = prompt('Penanggung Jawab (PIC):', 'EverAfter WO');
+  const newId = Math.max(0, ...db.checklist.map(x => x.id)) + 1;
+  const newItem = { id: newId, phase: phase || 'H-30', title: title, done: false, pic: pic || 'EverAfter' };
+  db.checklist.push(newItem);
+  save();
+  sendToN8n('create', 'checklist', newItem);
+  showToast('Tugas checklist ditambahkan di website.', 'info');
+  tasksPage();
+}
+
+// ==========================================
+// 5. GENERIC CRUD TABLES (Clients, Events, Payments)
+// ==========================================
+const configs = {
+  clients: {
+    title: 'Klien & Leads',
+    button: 'Tambah Klien',
+    fields: [
+      ['name', 'Nama Klien', 'text'],
+      ['phone', 'Nomor Telepon / WhatsApp', 'text'],
+      ['email', 'Email', 'email'],
+      ['date', 'Tanggal Acara', 'date'],
+      ['package', 'Pilihan Paket Wedding', 'select-package'],
+      ['status', 'Status Klien', 'select', ['Confirmed', 'Pending', 'Cancelled']]
+    ],
+    cols: ['Nama Klien', 'Telepon / WhatsApp', 'Tanggal Acara', 'Paket Pilihan', 'Status'],
+    keys: ['name', 'phone', 'date', 'package', 'status']
+  },
+  events: {
+    title: 'Acara & Booking',
+    button: 'Tambah Acara',
+    fields: [
+      ['title', 'Nama Acara (The Wedding of...)', 'text'],
+      ['client', 'Nama Klien', 'text'],
+      ['date', 'Tanggal Acara', 'date'],
+      ['venue', 'Lokasi / Venue Acara', 'text'],
+      ['status', 'Status Booking', 'select', ['Confirmed', 'Pending', 'Cancelled']]
+    ],
+    cols: ['Nama Acara', 'Klien', 'Tanggal', 'Venue', 'Status'],
+    keys: ['title', 'client', 'date', 'venue', 'status']
+  },
+  packages: {
+    title: 'Paket Wedding',
+    button: 'Tambah Paket',
+    fields: [
+      ['name', 'Nama Paket', 'text'],
+      ['price', 'Harga Paket (Angka Rupiah)', 'number'],
+      ['category', 'Kategori Paket', 'select', ['Intimate (<200 Tamu)', 'Outdoor & Garden', 'Traditional Adat', 'Luxury Ballroom (>500 Tamu)']],
+      ['guestCapacity', 'Kapasitas Tamu (misal: Hingga 200 tamu)', 'text'],
+      ['concept', 'Konsep / Eyebrow (misal: Outdoor & Romantic)', 'text'],
+      ['description', 'Deskripsi Paket', 'textarea']
+    ],
+    cols: ['Nama Paket', 'Kategori', 'Kapasitas', 'Harga', 'Deskripsi'],
+    keys: ['name', 'category', 'guestCapacity', 'price', 'description']
+  },
+  payments: {
+    title: 'Invoice & Pembayaran',
+    button: 'Tambah Pembayaran',
+    fields: [
+      ['client', 'Nama Klien', 'text'],
+      ['amount', 'Jumlah Pembayaran (Angka)', 'number'],
+      ['date', 'Tanggal Pembayaran', 'date'],
+      ['method', 'Metode Pembayaran', 'select', ['Transfer Bank', 'E-Wallet', 'Tunai']],
+      ['status', 'Status Pembayaran', 'select', ['Paid', 'Pending']]
+    ],
+    cols: ['Klien', 'Jumlah Pembayaran', 'Tanggal', 'Metode', 'Status'],
+    keys: ['client', 'amount', 'date', 'method', 'status']
+  },
+  vendors: {
+    title: 'Rekanan Vendor',
+    button: 'Tambah Vendor',
+    fields: [
+      ['name', 'Nama Vendor', 'text'],
+      ['category', 'Kategori Vendor', 'select', ['Dekorasi', 'Catering', 'MUA & Busana', 'Dokumentasi', 'Entertainment', 'Venue', 'Pemandu Adat']],
+      ['contact', 'No. WhatsApp / Kontak', 'text'],
+      ['instagram', 'Akun Instagram (@vendor)', 'text'],
+      ['location', 'Lokasi Operasional', 'text'],
+      ['status', 'Status Rekanan', 'select', ['Official Partner', 'Exclusive Partner', 'Verified Partner']],
+      ['desc', 'Spesialisasi & Deskripsi Layanan', 'textarea']
+    ],
+    cols: ['Nama Vendor', 'Kategori', 'Kontak', 'Lokasi', 'Status'],
+    keys: ['name', 'category', 'contact', 'location', 'status']
+  }
+};
+
+let tableStatusFilter = 'Semua';
+
+function tablePage(type, filter='') {
+  const c = configs[type];
+  let rows = (db[type] || []).filter(o => Object.values(o).join(' ').toLowerCase().includes(filter.toLowerCase()));
+  
+  if (tableStatusFilter !== 'Semua' && (type === 'clients' || type === 'events' || type === 'payments')) {
+    rows = rows.filter(r => r.status === tableStatusFilter);
+  }
+
+  let extraHeader = '';
+  if (type === 'payments') {
+    const totalPaid = db.payments.filter(x => x.status === 'Paid').reduce((a, b) => a + Number(b.amount), 0);
+    const totalPending = db.payments.filter(x => x.status !== 'Paid').reduce((a, b) => a + Number(b.amount), 0);
+    extraHeader = `
+    <div class="stats" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 20px">
+      <div class="stat"><div class="stat-top">Total Pembayaran Masuk</div><strong style="color: #278052">${rupiah(totalPaid)}</strong><small>Status Lunas (Paid)</small></div>
+      <div class="stat"><div class="stat-top">Sisa Piutang Menunggu</div><strong style="color: #9a741b">${rupiah(totalPending)}</strong><small>Status Pending</small></div>
+      <div class="stat"><div class="stat-top">Total Nilai Tagihan</div><strong>${rupiah(totalPaid + totalPending)}</strong><small>Keseluruhan invoice</small></div>
+    </div>`;
+  }
+
+  content.innerHTML = `
+  <div class="section-head">
+    <div>
+      <h2>${c.title}</h2>
+      <div class="muted">Kelola data terpusat untuk ${c.title.toLowerCase()} pernikahan klien.</div>
+    </div>
+    <button class="primary" id="addBtn">＋ ${c.button}</button>
+  </div>
+
+  ${extraHeader}
+
+  <div class="toolbar">
+    ${(type === 'clients' || type === 'events' || type === 'payments') ? `
+      <div class="filter-chips">
+        ${['Semua', type === 'payments' ? 'Paid' : 'Confirmed', 'Pending'].map(s => `
+          <button class="chip ${tableStatusFilter === s ? 'active' : ''}" onclick="tableStatusFilter='${s}'; tablePage('${type}', '${filter}')">${s}</button>
+        `).join('')}
+      </div>
+    ` : ''}
+    <input class="search" id="searchBox" placeholder="Cari data ${c.title.toLowerCase()}..." value="${filter}">
+    <div class="spacer"></div>
+    <span class="muted">${rows.length} data ditemukan</span>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          ${c.cols.map(x => `<th>${x}</th>`).join('')}
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(o => `
+          <tr>
+            ${c.keys.map(k => `
+              <td>
+                ${k === 'status' ? statusPill(o[k]) :
+                  k === 'date' ? dateFmt(o[k]) :
+                  k === 'price' || k === 'amount' ? `<b style="color: #906e16">${rupiah(o[k])}</b>` :
+                  k === 'phone' ? `<a href="https://wa.me/62${(o[k]||'').replace(/[^0-9]/g,'')}" target="_blank" style="color: var(--wine); text-decoration:none; font-weight:500">💬 ${o[k]}</a>` :
+                  k === 'name' || k === 'title' || k === 'client' ? `
+                    <div class="person">
+                      <div class="mini-avatar">${initials(String(o[k]))}</div>
+                      <div>
+                        <b>${o[k]}</b>
+                        ${o.email ? `<small class="muted" style="display:block; font-size:11px">${o.email}</small>` : ''}
+                      </div>
+                    </div>` :
+                  o[k] || '-'}
+              </td>
+            `).join('')}
+            <td>
+              <div class="actions">
+                <button class="small-btn outline" onclick="editItem('${type}', ${o.id})">Edit</button>
+                <button class="small-btn danger" onclick="deleteItem('${type}', ${o.id})">Hapus</button>
+              </div>
+            </td>
+          </tr>
+        `).join('') || `<tr><td colspan="${c.cols.length + 1}" class="empty">Data tidak ditemukan.</td></tr>`}
+      </tbody>
+    </table>
+  </div>
+  `;
+
+  document.getElementById('addBtn').onclick = () => openModal(type);
+  document.getElementById('searchBox').oninput = e => tablePage(type, e.target.value);
+}
+
+function clientsPage() { tablePage('clients'); }
+function eventsPage() { tablePage('events'); }
+function paymentsPage() { tablePage('payments'); }
+
+// ==========================================
+// 6. ANALYTICS FUNNEL PAGE
+// ==========================================
+function analyticsPage() {
+  const visitors = 1200;
+  const leads = db.clients.length;
+  const consultations = Math.min(leads, db.clients.filter(x => x.status === 'Confirmed').length);
+  const bookings = Math.min(consultations, db.events.filter(x => x.status === 'Confirmed').length);
+  const paidNames = new Set(db.payments.filter(x => x.status === 'Paid').map(x => x.client));
+  const paidBookings = Math.min(bookings, paidNames.size);
+  const completed = Math.min(paidBookings, db.events.filter(x => x.completion === 'Selesai').length);
+
+  const stages = [
+    { label: 'T1 · Pengunjung Website & Media Sosial', value: visitors },
+    { label: 'T2 · Menghubungi Planner (Leads Terdaftar)', value: leads },
+    { label: 'T3 · Sesi Konsultasi & Pemilihan Paket', value: consultations },
+    { label: 'T4 · Booking Dikonfirmasi (DP Masuk)', value: bookings },
+    { label: 'T5 · Pelunasan Pembayaran Invoice', value: paidBookings },
+    { label: 'T6 · Wedding Sukses Terlaksana', value: completed }
+  ];
+
+  const overall = completed / visitors * 100;
+
+  content.innerHTML = `
+  <div class="section-head">
+    <div>
+      <h2>Wedding Customer Conversion Funnel</h2>
+      <div class="muted">Analisis perjalanan calon pengantin dari kunjungan website pertama hingga pelaksanaan hari-H.</div>
+    </div>
+  </div>
+
+  <div class="stats" style="grid-template-columns: repeat(3, 1fr)">
+    <div class="stat">
+      <div class="stat-top">Website & Social Visitors</div>
+      <strong>${visitors.toLocaleString('id-ID')}</strong>
+      <small>Estimasi traffic calon pengantin</small>
+    </div>
+    <div class="stat">
+      <div class="stat-top">Total Leads Masuk</div>
+      <strong style="color: var(--wine)">${leads}</strong>
+      <small>Diambil dari menu Leads & Clients</small>
+    </div>
+    <div class="stat">
+      <div class="stat-top">Wedding Completed</div>
+      <strong style="color: #278052">${completed}</strong>
+      <small>Berdasarkan status acara selesai</small>
+    </div>
+  </div>
+
+  <div class="funnel-panel">
+    <div class="funnel-head">
+      <div>
+        <h3>Alur Konversi Calon Pengantin ke Hari-H</h3>
+        <p>Setiap tahap dievaluasi rasio konversinya dibandingkan dengan tahap sebelumnya.</p>
+      </div>
+      <div class="funnel-total">
+        <strong>${overall.toFixed(1).replace('.', ',')}%</strong>
+        <small>Overall Conversion Rate</small>
+      </div>
+    </div>
+
+    <div class="funnel-list">
+      ${stages.map((s, i) => {
+        const prev = i === 0 ? visitors : stages[i - 1].value;
+        const rate = i === 0 ? 100 : (prev ? s.value / prev * 100 : 0);
+        const width = Math.max(34, 100 - i * 9.5);
+        return `
+        <div class="funnel-step" style="width: ${width}%">
+          <span>${s.label}</span>
+          <span class="funnel-right">
+            <b>${s.value.toLocaleString('id-ID')}</b>
+            <span class="funnel-rate">${rate.toFixed(1).replace('.', ',')}%</span>
+          </span>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="funnel-foot">
+      Formula: Konversi Tahap = (Jumlah Tahap Sekarang ÷ Jumlah Tahap Sebelumnya) × 100%. Overall = Wedding Selesai ÷ Pengunjung × 100%.
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Detail Perhitungan & Metrik</h3>
+    <div class="table-wrap" style="box-shadow:none">
+      <table>
+        <thead>
+          <tr>
+            <th>Tahap Perjalanan Klien</th>
+            <th>Jumlah Klien</th>
+            <th>Perhitungan Konversi</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${stages.map((s, i) => {
+            const prev = i === 0 ? visitors : stages[i - 1].value;
+            const rate = i === 0 ? 100 : (prev ? s.value / prev * 100 : 0);
+            return `
+            <tr>
+              <td><b>${s.label}</b></td>
+              <td><b>${s.value.toLocaleString('id-ID')}</b></td>
+              <td>${i === 0 ? 'Tahap Awal (Baseline)' : `${s.value} ÷ ${prev} × 100 = ${rate.toFixed(1).replace('.', ',')}%`}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  `;
+}
+
+// ==========================================
+// 7. MODAL CONTROLLER & FORM SUBMISSION
+// ==========================================
+function openModal(type, item=null) {
+  editing = item;
+  const c = configs[type];
+  document.getElementById('modalTitle').textContent = (item ? 'Edit ' : 'Tambah ') + c.title;
+
+  document.getElementById('formFields').innerHTML = c.fields.map(([key, label, input, opts]) => {
+    let val = item ? (item[key] !== undefined ? String(item[key]).replaceAll('"', '&quot;') : '') : '';
+
+    if (input === 'select-package') {
+      const packageOptions = db.packages.map(p => p.name);
+      return `
+      <div class="field">
+        <label>${label}</label>
+        <select name="${key}">
+          ${packageOptions.map(pName => `<option value="${pName}" ${val === pName ? 'selected' : ''}>${pName}</option>`).join('')}
+        </select>
+      </div>`;
+    }
+
+    if (input === 'select') {
+      return `
+      <div class="field">
+        <label>${label}</label>
+        <select name="${key}">
+          ${opts.map(v => `<option value="${v}" ${val === v ? 'selected' : ''}>${v}</option>`).join('')}
+        </select>
+      </div>`;
+    }
+
+    if (input === 'textarea') {
+      return `
+      <div class="field">
+        <label>${label}</label>
+        <textarea name="${key}" rows="3" required>${val}</textarea>
+      </div>`;
+    }
+
+    return `
+    <div class="field">
+      <label>${label}</label>
+      <input name="${key}" type="${input}" value="${val}" required>
+    </div>`;
+  }).join('');
+
+  document.getElementById('dataForm').dataset.type = type;
+  document.getElementById('modalBg').classList.remove('hidden');
+}
+
+function editItem(type, id) {
+  const item = db[type].find(x => x.id === id);
+  if (item) openModal(type, item);
+}
+
+async function deleteItem(type, id) {
+  if (!confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
+  const deletedRecord = (db[type] || []).find(x => x.id === id);
+  db[type] = (db[type] || []).filter(x => x.id !== id);
+  save();
+  render();
+  if (deletedRecord) await sendToN8n('delete', type, deletedRecord);
+  else showToast('Data dihapus dari website.', 'info');
+}
+
+document.getElementById('dataForm').onsubmit = async e => {
+  e.preventDefault();
+  const form = document.getElementById('dataForm');
+  const type = form.dataset.type;
+  const record = Object.fromEntries(new FormData(form));
+  const action = editing ? 'update' : 'create';
+
+  if (type === 'packages') {
+    record.price = Number(record.price);
+    if (!record.image) record.image = 'assets/intimate-wedding.png';
+  }
+  if (type === 'payments') {
+    record.amount = Number(record.amount);
+  }
+
+  if (editing) {
+    record.id = editing.id;
+    Object.assign(editing, record);
+  } else {
+    record.id = Math.max(0, ...(db[type] || []).map(x => Number(x.id) || 0)) + 1;
+    if (!db[type]) db[type] = [];
+    db[type].push(record);
+  }
+
+  // Simpan lokal terlebih dahulu, kemudian tunggu hasil sinkronisasi.
+  save();
+  hideModal();
+  render();
+  showToast('Data tersimpan di website. Mengirim ke Google Sheets...', 'info');
+  await sendToN8n(action, type, record);
+};
+
+function hideModal() {
+  document.getElementById('modalBg').classList.add('hidden');
+}
+
+document.getElementById('closeModal').onclick = hideModal;
+document.getElementById('cancelModal').onclick = hideModal;
+document.getElementById('modalBg').onclick = e => {
+  if (e.target === document.getElementById('modalBg')) hideModal();
+};
+
+// ==========================================
+// 8. EVERAFTER AI CONTROLLER (HERMES ENGINE)
+// ==========================================
+const aiWidgetCard = document.getElementById('aiWidgetCard');
+const aiLauncherBtn = document.getElementById('aiLauncherBtn');
+const closeAiBtn = document.getElementById('closeAiBtn');
+const aiChatForm = document.getElementById('aiChatForm');
+const aiInput = document.getElementById('aiInput');
+const aiMessagesContainer = document.getElementById('aiMessagesContainer');
+const aiStatusDot = document.getElementById('aiStatusDot');
+const aiStatusText = document.getElementById('aiStatusText');
+const sidebarAiTrigger = document.getElementById('sidebarAiTrigger');
+
+let aiChatHistory = [];
+let isHermesOnline = false;
+
+// Check backend status
+async function checkHermesBackend() {
+  try {
+    const res = await fetch(`${EVERAFTER_API_BASE}/api/health`, { method: 'GET', signal: AbortSignal.timeout(2000) });
+    if (res.ok) {
+      isHermesOnline = true;
+      aiStatusDot.classList.remove('offline');
+      aiStatusText.textContent = 'Online · Powered by Hermes';
+      return true;
+    }
+  } catch (err) {}
+  isHermesOnline = false;
+  aiStatusDot.classList.add('offline');
+  aiStatusText.textContent = 'Backend offline';
+  return false;
+}
+
+// Widget Toggle
+function openAiWidget() {
+  aiWidgetCard.classList.remove('minimized');
+  aiLauncherBtn.classList.add('hidden');
+  aiInput.focus();
+  checkHermesBackend();
+}
+
+function closeAiWidget() {
+  aiWidgetCard.classList.add('minimized');
+  aiLauncherBtn.classList.remove('hidden');
+}
+
+closeAiBtn.onclick = closeAiWidget;
+aiLauncherBtn.onclick = openAiWidget;
+sidebarAiTrigger.onclick = () => {
+  openAiWidget();
+  sidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('open');
+};
+
+// Send message function
+async function handleAiSubmit(userMsg) {
+  if (!userMsg || !userMsg.trim()) return;
+
+  // Hide suggestion chips if present
+  const sugg = document.getElementById('aiSuggestionsWrap');
+  if (sugg) sugg.style.display = 'none';
+
+  // 1. Append user message pill (target screenshot styling)
+  const userPill = document.createElement('div');
+  userPill.className = 'ai-user-pill';
+  userPill.textContent = userMsg;
+  aiMessagesContainer.appendChild(userPill);
+  aiMessagesContainer.scrollTop = aiMessagesContainer.scrollHeight;
+
+  // 2. Append temporary typing bubble
+  const typingCard = document.createElement('div');
+  typingCard.className = 'ai-card-msg';
+  typingCard.style.padding = '12px 16px';
+  typingCard.innerHTML = '<span style="color: #8c8d96; font-size: 12.5px">✦ EverAfter AI sedang menganalisis data...</span>';
+  aiMessagesContainer.appendChild(typingCard);
+  aiMessagesContainer.scrollTop = aiMessagesContainer.scrollHeight;
+
+  // 3. Send request to Hermes AI backend
+  try {
+    const response = await fetch(`${EVERAFTER_API_BASE}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: userMsg,
+        history: aiChatHistory
+      }),
+      signal: AbortSignal.timeout(15000)
+    });
+
+    const data = await response.json();
+    typingCard.remove();
+
+    if (data.success && data.reply) {
+      appendAiResponse(data.reply);
+      aiChatHistory.push({ role: 'user', content: userMsg });
+      aiChatHistory.push({ role: 'assistant', content: data.reply });
+      return;
+    } else if (data.error) {
+      appendAiResponse(generateSmartLocalResponse(userMsg, data.error));
+      return;
+    }
+  } catch (netErr) {
+    // If backend server is currently offline or unreachable, provide intelligent local AI response
+    typingCard.remove();
+    appendAiResponse(generateSmartLocalResponse(userMsg));
+  }
+}
+
+function appendAiResponse(text) {
+  const replyCard = document.createElement('div');
+  replyCard.className = 'ai-card-msg';
+  
+  // Format basic bold or line breaks nicely
+  const formatted = text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+  replyCard.innerHTML = formatted;
+  
+  aiMessagesContainer.appendChild(replyCard);
+  aiMessagesContainer.scrollTop = aiMessagesContainer.scrollHeight;
+}
+
+function quickSendPrompt(txt) {
+  aiInput.value = txt;
+  aiChatForm.dispatchEvent(new Event('submit'));
+}
+
+// Intelligent fallback assistant when server.js isn't running
+function generateSmartLocalResponse(query, errorMsg) {
+  const q = query.toLowerCase();
+  
+  if (q.includes('pembayaran') || q.includes('bayar') || q.includes('transaksi') || q.includes('keuangan')) {
+    const paid = db.payments.filter(x => x.status === 'Paid').reduce((a, b) => a + Number(b.amount), 0);
+    const pending = db.payments.filter(x => x.status !== 'Paid').reduce((a, b) => a + Number(b.amount), 0);
+    return `Baik! Saya akan membantu menganalisis pembayaran dan status transaksi.
+    <br><br>
+    <b>Ringkasan Keuangan EverAfter:</b><br>
+    • Total Pembayaran Masuk (Lunas): <b style="color:#278052">${rupiah(paid)}</b><br>
+    • Sisa Piutang Pending: <b style="color:#9a741b">${rupiah(pending)}</b><br>
+    • Total Keseluruhan Invoice: <b>${rupiah(paid + pending)}</b><br>
+    Semua invoice pembayaran tersimpan rapi dan dapat ditinjau pada menu <b>Quotes & Payments</b>.`;
+  }
+
+  if (q.includes('nadia') || q.includes('arif')) {
+    const ev = db.events.find(x => x.title.toLowerCase().includes('nadia'));
+    return `Acara <b>${ev ? ev.title : 'The Wedding of Nadia & Arif'}</b> dijadwalkan pada <b>12 Des 2026</b> di <b>Grand Ballroom Jakarta</b> dengan status <b>Confirmed</b>. Paket yang digunakan adalah <b>Royal Wedding</b> dan persiapan checklist sedang berjalan on-track.`;
+  }
+
+  if (q.includes('paket') || q.includes('budget') || q.includes('harga')) {
+    return `Untuk estimasi anggaran pernikahan, EverAfter memiliki <b>8 paket terkurasi</b>:<br>
+    1. <b>Intimate Wedding</b> (Rp 25 Juta · 100 tamu)<br>
+    2. <b>Rustic Botanical</b> (Rp 35 Juta · 150 tamu)<br>
+    3. <b>Garden Party</b> (Rp 45 Juta · 200 tamu)<br>
+    4. <b>Traditional Adat</b> (Rp 60 Juta · 350 tamu)<br>
+    5. <b>Royal Wedding</b> (Rp 75 Juta · 500 tamu)<br>
+    6. <b>Modern Luxury</b> (Rp 90 Juta · 500 tamu)<br>
+    Semua sudah mencakup rekanan vendor lengkap (Dekorasi, Catering, MUA, Dokumentasi, Entertainment & WO Kru).`;
+  }
+
+  if (q.includes('vendor') || q.includes('dekorasi') || q.includes('catering') || q.includes('mua')) {
+    return `EverAfter saat ini bermitra resmi dengan <b>${db.vendors.length} vendor rekanan terverifikasi</b>, termasuk <b>Royal Blossom Decor</b> (Ballroom), <b>Medina Royal Catering</b>, <b>Bennu Artistry</b> (MUA Celebrity), dan <b>The Leonardi Team</b> (Dokumentasi 4K).`;
+  }
+
+  return `Halo! Saya EverAfter AI siap membantu mengelola jadwal acara, detail paket pernikahan, rekanan vendor, hingga pembukuan keuangan pembayaran pernikahan Anda.`;
+}
+
+aiChatForm.onsubmit = e => {
+  e.preventDefault();
+  const msg = aiInput.value.trim();
+  if (!msg) return;
+  aiInput.value = '';
+  handleAiSubmit(msg);
+};
+
+// Check backend on start
+checkHermesBackend();
+
+// Initialize App
+render();
+</script>
+</body>
+</html>

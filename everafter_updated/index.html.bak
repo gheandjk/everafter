@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EverAfter — Wedding Organizer</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+:root{--wine:#6d263d;--wine2:#8d3d55;--cream:#fbf7f2;--ink:#30252a;--muted:#8b7d81;--line:#eee4e1;--white:#fff;--gold:#c59b68;--green:#34765c;--shadow:0 12px 35px rgba(68,35,46,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}
+.login-screen{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;background:#f8f1ec}.login-art{position:relative;overflow:hidden;background:linear-gradient(145deg,rgba(48,20,32,.22),rgba(48,20,32,.68)),url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1400&q=85') center/cover;display:flex;align-items:flex-end;padding:8%}.login-art h1{font:600 clamp(42px,5vw,72px)/1.05 'Playfair Display',serif;color:white;max-width:570px;margin:0}.login-art p{color:#f5e9e8;max-width:430px;line-height:1.7}.login-panel{display:flex;align-items:center;justify-content:center;padding:35px}.login-card{width:min(420px,100%)}.brand{font:600 29px 'Playfair Display',serif;color:var(--wine);letter-spacing:.3px}.brand small{display:block;font:11px 'DM Sans';letter-spacing:3px;color:var(--muted);margin-top:3px}.login-card h2{font:600 34px 'Playfair Display';margin:55px 0 8px}.sub{color:var(--muted);margin:0 0 30px;font-size:14px}.field{margin:17px 0}.field label{display:block;font-size:13px;font-weight:600;margin-bottom:8px}.field input,.field select{width:100%;padding:14px 15px;border:1px solid var(--line);border-radius:10px;background:white;outline:none}.field input:focus,.field select:focus{border-color:var(--wine2);box-shadow:0 0 0 3px #8d3d5515}.primary{background:var(--wine);color:white;border-radius:10px;padding:13px 18px;font-weight:600;transition:.2s}.primary:hover{background:var(--wine2);transform:translateY(-1px)}.login-btn{width:100%;margin-top:12px}.hint{font-size:12px;color:var(--muted);background:#f3e9e6;padding:12px;border-radius:9px;margin-top:22px;line-height:1.7}.error{color:#b42318;font-size:13px;margin-top:10px}
+.app{min-height:100vh;display:flex}.sidebar{width:250px;background:#fff;border-right:1px solid var(--line);padding:27px 18px;position:fixed;inset:0 auto 0 0;display:flex;flex-direction:column;z-index:5}.sidebar .brand{padding:0 12px 35px}.nav-label{font-size:10px;letter-spacing:1.8px;color:#b2a4a6;padding:0 12px;margin:18px 0 9px}.nav button{width:100%;display:flex;gap:12px;align-items:center;text-align:left;padding:12px;border-radius:9px;background:transparent;color:#76676c;margin:3px 0;font-size:14px}.nav button.active,.nav button:hover{background:#f6ecee;color:var(--wine);font-weight:600}.nav .ico{width:20px;text-align:center;font-size:17px}.sidebar-bottom{margin-top:auto;padding:14px 12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}.main{margin-left:250px;width:calc(100% - 250px);padding:28px 38px 50px}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}.eyebrow{font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}.topbar h1{font:600 30px 'Playfair Display';margin:5px 0}.user{display:flex;align-items:center;gap:11px;font-size:13px}.avatar{width:39px;height:39px;border-radius:50%;background:#ead8dc;color:var(--wine);display:grid;place-items:center;font-weight:700}.section-head{display:flex;justify-content:space-between;align-items:center;margin:10px 0 20px}.section-head h2{font:600 25px 'Playfair Display';margin:0}.muted{color:var(--muted);font-size:13px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:17px;margin-bottom:26px}.stat,.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow)}.stat-top{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.stat-icon{width:35px;height:35px;border-radius:10px;background:#f7edef;color:var(--wine);display:grid;place-items:center}.stat strong{display:block;font:600 30px 'Playfair Display';margin:15px 0 3px}.stat small{color:var(--muted);font-size:11px}.dashboard-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:18px}.panel h3{font:600 19px 'Playfair Display';margin:0 0 18px}.event-row{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:1px solid var(--line)}.event-row:last-child{border:0}.datebox{width:48px;height:52px;background:#f8eff0;border-radius:9px;display:grid;place-content:center;text-align:center;color:var(--wine)}.datebox b{font:600 20px 'Playfair Display'}.datebox small{font-size:9px;letter-spacing:1px}.event-info{flex:1}.event-info b{font-size:13px}.event-info small{display:block;color:var(--muted);margin-top:4px;font-size:11px}.pill{display:inline-block;border-radius:30px;padding:5px 9px;font-size:10px;background:#edf5ef;color:var(--green)}.pill.pending{background:#fff4df;color:#9b6b1e}.pill.cancel{background:#fbeaea;color:#a33d3d}
+.table-wrap{overflow:auto;background:white;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow)}table{width:100%;border-collapse:collapse;min-width:700px}th,td{text-align:left;padding:15px 17px;border-bottom:1px solid var(--line);font-size:12px}th{background:#fcf9f7;color:#88797d;font-size:10px;letter-spacing:1px;text-transform:uppercase}tr:last-child td{border:0}.person{display:flex;align-items:center;gap:10px}.mini-avatar{width:31px;height:31px;border-radius:50%;background:#f1e2e5;color:var(--wine);display:grid;place-items:center;font-weight:700}.actions{display:flex;gap:7px}.small-btn{background:#f7eff0;color:var(--wine);padding:7px 10px;border-radius:7px;font-size:11px}.danger{background:#fff0ee;color:#b13b32}.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:15px}.search{padding:11px 13px;border:1px solid var(--line);border-radius:9px;width:260px;outline:none}.toolbar .spacer{flex:1}
+.modal-bg{position:fixed;inset:0;background:#21141ab0;display:grid;place-items:center;padding:20px;z-index:20}.modal{background:white;border-radius:16px;width:min(500px,100%);padding:25px;box-shadow:0 25px 70px #0003}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.modal-head h3{font:600 23px 'Playfair Display';margin:0}.close{background:transparent;font-size:23px;color:var(--muted)}.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}.secondary{background:#f5eeee;color:var(--wine);padding:12px 16px;border-radius:9px}.empty{padding:35px;text-align:center;color:var(--muted);font-size:13px}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,1fr)}.dashboard-grid{grid-template-columns:1fr}.main{padding:25px 22px}}@media(max-width:700px){.login-screen{grid-template-columns:1fr}.login-art{display:none}.login-panel{min-height:100vh}.sidebar{width:68px;padding:20px 8px}.sidebar .brand{font-size:0;padding:0 8px 25px}.sidebar .brand:after{content:'EA';font:600 20px 'Playfair Display';color:var(--wine)}.nav-label,.nav button span:not(.ico),.sidebar-bottom{display:none}.nav button{justify-content:center;padding:13px 5px}.main{margin-left:68px;width:calc(100% - 68px);padding:22px 13px}.topbar h1{font-size:24px}.user span{display:none}.stats{gap:9px}.stat{padding:13px}.stat strong{font-size:24px}.stat-top{font-size:11px}.toolbar{flex-wrap:wrap}.search{width:100%}.toolbar .spacer{display:none}.section-head{gap:10px}.section-head h2{font-size:22px}}
+
+/* PlanEase-inspired dashboard refinement */
+:root{--wine:#8b6716;--wine2:#a77d18;--cream:#faf9f6;--ink:#252631;--muted:#777985;--line:#ecebe8;--gold:#c29322;--shadow:0 2px 12px rgba(25,25,30,.035)}
+body{background:#fbfbfa;color:#252631}
+.sidebar{width:238px;padding:20px 15px;background:#fff;border-right:1px solid #e9e8e5}
+.sidebar .brand{font:600 27px 'Playfair Display',serif;color:#806018;padding:0 13px 30px}
+.sidebar .brand small{font:10px 'DM Sans';letter-spacing:2px;color:#9a8d72}
+.nav-label{font-size:10px;letter-spacing:1.5px;color:#a5a4a0;padding:0 13px;margin:20px 0 8px}
+.nav button{padding:11px 13px;color:#5e6069;border-radius:9px;font-size:13px}
+.nav button.active,.nav button:hover{background:#fbf5e8;color:#896510;font-weight:600}
+.nav .ico{font-size:16px}
+.sidebar-bottom{font-size:11px}
+.main{margin-left:238px;width:calc(100% - 238px);padding:25px 30px 42px;max-width:1800px}
+.topbar{margin-bottom:25px}
+.topbar h1{font:600 31px 'Playfair Display';color:#252631}
+.eyebrow{font-size:10px;letter-spacing:1.4px}
+.user{color:#555660}
+.avatar{background:#f5ecd7;color:#896510}
+.stat,.panel{border:1px solid #eeedea;border-radius:14px;box-shadow:0 2px 10px rgba(30,30,30,.025)}
+.stat{padding:19px 20px}
+.stat-top{color:#777985;font-size:12px}
+.stat-icon{background:#fbf5e8;color:#a17a1d;border-radius:50%}
+.stat strong{font:600 29px 'DM Sans';letter-spacing:-1px;color:#272832}
+.stat small{font-size:11px}
+.panel{padding:19px 20px}
+.panel h3{font:600 17px 'DM Sans';letter-spacing:-.3px}
+.primary{background:#b88713;color:#fff;border-radius:9px}
+.primary:hover{background:#9e7411}
+.small-btn{background:#faf4e7;color:#896510}
+.table-wrap{box-shadow:none}
+th{background:#fbfaf8}
+.pill{background:#edf7f0;color:#278052}
+.pill.pending{background:#fff6e4;color:#9a741b}
+.pill.cancel{background:#fff0ef;color:#b13b32}
+.section-head h2{font:600 25px 'Playfair Display'}
+@media(max-width:1000px){.main{padding:22px 18px}}
+@media(max-width:700px){.sidebar{width:65px;padding:18px 7px}.main{margin-left:65px;width:calc(100% - 65px);padding:18px 12px}.sidebar .brand{font-size:0}.sidebar .brand:after{content:'PE';font:600 19px 'Playfair Display';color:#806018}}
+
+
+.funnel-panel{background:#fff;border:1px solid #eeedea;border-radius:14px;padding:20px 21px;margin:0 0 17px;box-shadow:0 2px 10px rgba(30,30,30,.025)}
+.funnel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:16px}
+.funnel-head h3{font:600 18px 'DM Sans';margin:0 0 5px}
+.funnel-head p{font-size:11px;color:#85858b;margin:0}
+.funnel-total{text-align:right;white-space:nowrap}.funnel-total strong{display:block;font:600 26px 'DM Sans';color:#33866a}.funnel-total small{font-size:10px;color:#85858b}
+.funnel-list{display:grid;gap:7px}
+.funnel-step{height:37px;margin-inline:auto;max-width:100%;border-radius:30px;background:linear-gradient(90deg,#278b69,#55b58e);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:11px;font-weight:600}
+.funnel-step:nth-child(2){background:linear-gradient(90deg,#2d906f,#55b58e)}.funnel-step:nth-child(3){background:linear-gradient(90deg,#318f70,#58b58f)}.funnel-step:nth-child(4){background:linear-gradient(90deg,#388f72,#5ab48e)}.funnel-step:nth-child(5){background:linear-gradient(90deg,#438f76,#60b594)}.funnel-step:nth-child(6){background:linear-gradient(90deg,#4a927b,#68b99a)}
+.funnel-right{display:flex;align-items:center;gap:9px}.funnel-count{font-size:12px}.funnel-rate{font-size:9px;background:#ffffff30;border:1px solid #ffffff40;padding:3px 7px;border-radius:20px}.funnel-foot{font-size:10px;color:#898991;margin-top:12px}
+@media(max-width:700px){.funnel-panel{padding:15px 12px}.funnel-step{height:35px;padding:0 9px;font-size:9px}.funnel-right{gap:5px}.funnel-count{font-size:10px}.funnel-rate{font-size:8px;padding:2px 5px}.funnel-total strong{font-size:21px}}
+
+
+@media(max-width:900px){.stats[style*="repeat(3,minmax(0,1fr))"]{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:560px){.stats[style*="repeat(3,minmax(0,1fr))"]{grid-template-columns:1fr!important}}
+
+</style>
+</head>
+<body>
+<section id="loginScreen" class="login-screen">
+  <div class="login-art"><div><div style="font-size:11px;letter-spacing:3px;color:#f2d9dc;margin-bottom:18px">MOMENTS MADE TIMELESS</div><h1>Every love story deserves a beautiful beginning.</h1><p>Kelola setiap detail pernikahan dengan lebih mudah, rapi, dan berkesan bersama EverAfter.</p></div></div>
+  <div class="login-panel"><div class="login-card"><div class="brand">everafter.<small>WEDDING ORGANIZER</small></div><h2>Welcome back</h2><p class="sub">Masuk ke dashboard untuk mengelola acara pernikahan.</p>
+    <form id="loginForm"><div class="field"><label>Email</label><input id="email" type="email" placeholder="admin@everafter.com" required></div><div class="field"><label>Password</label><input id="password" type="password" placeholder="Masukkan password" required></div><button class="primary login-btn">Sign in to dashboard</button><div id="loginError" class="error"></div></form>
+    <div class="hint"><b>Akun demo</b><br>Email: admin@everafter.com<br>Password: everafter123</div>
+  </div></div>
+</section>
+<div id="app" class="app hidden">
+<aside class="sidebar"><div class="brand">everafter.<small>WEDDING ORGANIZER</small></div><div class="nav-label">WORKSPACE</div><nav class="nav">
+<button class="active" data-page="dashboard"><span class="ico">⌂</span><span>Dashboard</span></button>
+<div class="nav-label">MANAGE</div>
+<button data-page="clients"><span class="ico">♙</span><span>Leads & Clients</span></button>
+<button data-page="events"><span class="ico">♡</span><span>Weddings & Bookings</span></button>
+<button data-page="packages"><span class="ico">▤</span><span>Packages & Proposals</span></button>
+<button data-page="payments"><span class="ico">◇</span><span>Quotes & Payments</span></button>
+<div class="nav-label">PLANNING</div>
+<button data-page="tasks"><span class="ico">☑</span><span>Tasks & Checklist</span></button>
+<button data-page="vendors"><span class="ico">♧</span><span>Vendor Library</span></button>
+<button data-page="analytics"><span class="ico">↗</span><span>Analytics</span></button>
+</nav><div class="sidebar-bottom">EverAfter Admin Panel<br>Versi 1.0 · Data demo</div></aside>
+<main class="main"><header class="topbar"><div><div class="eyebrow">WEDDING ORGANIZER MANAGEMENT</div><h1 id="pageTitle">Dashboard</h1></div><div class="user"><div class="avatar">A</div><span>Administrator</span><button class="small-btn" id="logout">Keluar ↗</button></div></header><div id="content"></div></main>
+</div>
+<div id="modalBg" class="modal-bg hidden"><div class="modal"><div class="modal-head"><h3 id="modalTitle">Tambah data</h3><button class="close" id="closeModal">×</button></div><form id="dataForm"><div id="formFields"></div><div class="modal-actions"><button type="button" class="secondary" id="cancelModal">Batal</button><button class="primary">Simpan data</button></div></form></div></div>
+<script>
+const demo={
+clients:[
+{id:1,name:'Nadia Putri',phone:'0812-3456-7890',email:'nadia@email.com',date:'2026-12-12',package:'Royal Wedding',status:'Confirmed'},
+{id:2,name:'Rizky & Amel',phone:'0821-7788-9900',email:'rizky@email.com',date:'2026-12-20',package:'Intimate Wedding',status:'Pending'},
+{id:3,name:'Dinda Maharani',phone:'0856-1122-3344',email:'dinda@email.com',date:'2027-01-08',package:'Garden Party',status:'Confirmed'},
+{id:4,name:'Fajar & Sinta',phone:'0813-5555-1212',email:'fajar@email.com',date:'2027-01-15',package:'Royal Wedding',status:'Pending'}],
+events:[
+{id:1,title:'The Wedding of Nadia & Arif',client:'Nadia Putri',date:'2026-12-12',venue:'Grand Ballroom Jakarta',status:'Confirmed'},
+{id:2,title:'Rizky & Amel Wedding',client:'Rizky & Amel',date:'2026-12-20',venue:'The Garden Venue',status:'Pending'},
+{id:3,title:'Dinda & Bima Celebration',client:'Dinda Maharani',date:'2027-01-08',venue:'Aston Hotel Bekasi',status:'Confirmed'}],
+packages:[
+{id:1,name:'Intimate Wedding',price:25000000,description:'Acara intimate hingga 100 tamu'},
+{id:2,name:'Garden Party',price:45000000,description:'Konsep outdoor dengan dekorasi taman'},
+{id:3,name:'Royal Wedding',price:75000000,description:'Paket lengkap hingga 500 tamu'}],
+payments:[
+{id:1,client:'Nadia Putri',amount:37500000,date:'2026-10-20',method:'Transfer Bank',status:'Paid'},
+{id:2,client:'Rizky & Amel',amount:12500000,date:'2026-11-02',method:'Transfer Bank',status:'Pending'},
+{id:3,client:'Dinda Maharani',amount:22500000,date:'2026-11-04',method:'E-Wallet',status:'Paid'}]
+};
+let db=JSON.parse(localStorage.getItem('everafter_db')||'null')||demo;
+db.events.forEach(e=>{if(!e.completion)e.completion='Belum Selesai'});
+function save(){localStorage.setItem('everafter_db',JSON.stringify(db))}
+const rupiah=n=>'Rp '+Number(n).toLocaleString('id-ID');
+const dateFmt=d=>new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
+const initials=n=>n.split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase();
+const statusPill=s=>`<span class="pill ${s==='Pending'?'pending':s==='Cancelled'?'cancel':''}">${s}</span>`;
+let page='dashboard',editing=null;
+document.getElementById('loginForm').addEventListener('submit',e=>{e.preventDefault();if(email.value==='admin@everafter.com'&&password.value==='everafter123'){loginScreen.classList.add('hidden');app.classList.remove('hidden');render()}else loginError.textContent='Email atau password salah. Silakan coba lagi.'});
+logout.onclick=()=>{app.classList.add('hidden');loginScreen.classList.remove('hidden');loginForm.reset()};
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{page=b.dataset.page;document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x===b));render()});
+function render(){
+ pageTitle.textContent=({dashboard:'Dashboard',clients:'Leads & Clients',events:'Weddings & Bookings',packages:'Packages & Proposals',payments:'Quotes & Payments',tasks:'Tasks & Checklist',vendors:'Wedding Packages',analytics:'Funnel Analytics'})[page]||'Dashboard';
+ const pages={dashboard:dashboardPage,clients:clientsPage,events:eventsPage,packages:packagesPage,payments:paymentsPage,tasks:tasksPage,vendors:vendorsPage,analytics:analyticsPage};
+ (pages[page]||dashboardPage)();
+}
+const plannerTasks=[
+{title:'Kirim final timeline ke klien',event:'Nadia & Arif Wedding',priority:'High',due:'Terlambat',done:false},
+{title:'Review dan setujui proposal dekorasi',event:'Rizky & Amel Wedding',priority:'Medium',due:'Terlambat',done:false},
+{title:'Konfirmasi jumlah tamu dengan klien',event:'Dinda & Bima Wedding',priority:'Medium',due:'12 Nov',done:false},
+{title:'Finalisasi daftar vendor',event:'Nadia & Arif Wedding',priority:'Low',due:'15 Nov',done:true}
+];
+function dashboardPage(){
+ const paid=db.payments.filter(x=>x.status==='Paid').reduce((a,x)=>a+Number(x.amount),0);
+ const outstanding=db.payments.filter(x=>x.status!=='Paid').reduce((a,x)=>a+Number(x.amount),0);
+ const active=db.events.filter(x=>x.status!=='Cancelled').length;
+ const done=db.events.filter(x=>x.completion==='Selesai').length;
+ const taskPct=Math.round(done/(db.events.length||1)*100);
+ const upcoming=db.events.slice().sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);
+ content.innerHTML=`
+ <div style="margin:0 0 18px"><div class="eyebrow">${new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}).toUpperCase()}</div><h2 style="font:600 32px 'Playfair Display';margin:5px 0 0">Good evening, Planner</h2></div>
+ <div class="panel" style="padding:16px 19px;margin-bottom:17px">
+  <div style="display:flex;align-items:center;gap:13px"><div class="stat-icon" style="width:39px;height:39px;font-size:18px">ⓘ</div><div style="flex:1"><b style="font-size:17px">Action Center</b><div class="muted" style="margin-top:3px">2 items need attention</div></div><span class="pill pending">2</span></div>
+  <div style="margin-top:13px;border:1px solid #f1dddd;border-radius:9px;padding:11px 13px;color:#ad3434;font-size:12px;display:flex;justify-content:space-between"><b>! &nbsp; 2 overdue tasks</b><span>›</span></div>
+ </div>
+ <div class="stats">
+  <div class="stat"><div class="stat-top">Active Weddings <span class="stat-icon">♙</span></div><strong>${active}</strong><small>Acara yang sedang dikelola</small></div>
+  <div class="stat"><div class="stat-top">Collected <span class="stat-icon" style="background:#eaf7f1;color:#328b68">▣</span></div><strong style="font-size:25px">${rupiah(paid)}</strong><small>Total pembayaran diterima</small></div>
+  <div class="stat"><div class="stat-top">Outstanding <span class="stat-icon">＄</span></div><strong style="font-size:25px">${rupiah(outstanding)}</strong><small>Pembayaran belum lunas</small></div>
+  <div class="stat"><div class="stat-top">Weddings Done <span class="stat-icon" style="background:#edf4fc;color:#477fc0">✓</span></div><strong>${taskPct}%</strong><small>${done} dari ${db.events.length} acara selesai</small></div>
+ </div>
+ <div class="dashboard-grid" style="grid-template-columns:1.45fr 1fr;align-items:stretch">
+  <div style="display:grid;gap:17px;align-content:start">
+   <div class="panel"><h3>↗ &nbsp; At a Glance</h3>
+    <div style="display:flex;justify-content:space-between;font-size:12px;margin:16px 0 8px"><span>Task Completion</span><b>${taskPct}%</b></div>
+    <div style="height:7px;background:#f0efed;border-radius:10px;overflow:hidden"><div style="width:${taskPct}%;height:100%;background:#b88713"></div></div>
+    <div class="muted" style="font-size:10px;margin-top:7px">${done} of ${db.events.length} weddings completed</div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;margin:18px 0 8px"><span>Invoice Collection</span><b>${paid+outstanding?Math.round(paid/(paid+outstanding)*100):0}%</b></div>
+    <div style="height:7px;background:#f0efed;border-radius:10px;overflow:hidden"><div style="width:${paid+outstanding?paid/(paid+outstanding)*100:0}%;height:100%;background:#b88713"></div></div>
+    <div class="muted" style="font-size:10px;margin-top:7px">${rupiah(paid)} collected dari ${rupiah(paid+outstanding)}</div>
+    <div class="stats" style="grid-template-columns:1fr 1fr;margin:17px 0 0;gap:10px">
+     <div style="background:#faf9f7;border-radius:9px;padding:12px"><b style="font-size:19px">${plannerTasks.filter(x=>!x.done).length}</b><div class="muted" style="font-size:10px">Pending Tasks</div></div>
+     <div style="background:#faf9f7;border-radius:9px;padding:12px"><b style="font-size:19px">${db.events.length}</b><div class="muted" style="font-size:10px">Events Scheduled</div></div>
+    </div>
+   </div>
+   <div class="panel"><div style="display:flex;justify-content:space-between;align-items:center"><h3>☷ &nbsp; Priority Tasks</h3><span class="muted">${plannerTasks.filter(x=>!x.done).length} pending</span></div>
+    ${plannerTasks.slice(0,3).map((t,i)=>`<label style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #f0efed;cursor:pointer"><input type="checkbox" ${t.done?'checked':''} onchange="plannerTasks[${i}].done=this.checked;dashboardPage()" style="accent-color:#b88713;width:17px;height:17px"><span style="flex:1"><b style="font-size:12px;font-weight:500">${t.title}</b><small class="muted" style="display:block;margin-top:4px;font-size:10px">${t.event}</small></span><span class="pill ${t.due==='Terlambat'?'cancel':'pending'}">${t.due}</span><span class="pill pending">${t.priority}</span></label>`).join('')}
+    <div style="text-align:center;margin-top:13px"><button class="small-btn" onclick="page='tasks';render()">View all tasks　›</button></div>
+   </div>
+  </div>
+  <div style="display:grid;gap:17px;align-content:start">
+   <div class="panel"><h3>▣ &nbsp; Coming Up</h3>
+    ${upcoming.map(e=>`<div class="event-row"><div class="stat-icon" style="width:38px;height:38px;border-radius:50%">♡</div><div class="event-info"><b>${e.title}</b><small>${dateFmt(e.date)}　•　${e.venue}</small></div>${statusPill(e.status)}</div>`).join('')||'<div class="empty">Belum ada jadwal acara.</div>'}
+   </div>
+   <div class="panel"><div style="display:flex;justify-content:space-between;align-items:center"><h3>♡ &nbsp; Wedding Readiness</h3><span class="pill pending">Demo data</span></div>
+    ${upcoming.map((e,i)=>{let pct=[78,65,40][i]||55;return `<div class="event-row"><div style="width:43px;height:43px;border-radius:50%;border:3px solid ${pct>70?'#5c9b7d':pct>50?'#c49a2e':'#c95b52'};display:grid;place-items:center;font-size:12px;font-weight:700;color:${pct>70?'#39805e':pct>50?'#a47a18':'#b3443d'}">${pct}%</div><div class="event-info"><b>${e.title}</b><small>${dateFmt(e.date)}　•　Checklist progress</small></div><span class="pill ${pct>70?'':'pending'}">${pct>70?'On Track':pct>50?'Needs Attention':'At Risk'}</span></div>`}).join('')}
+   </div>
+  </div>
+ </div>
+ <div class="panel" style="margin-top:17px"><h3>Quick Actions</h3><div class="stats" style="grid-template-columns:repeat(4,1fr);margin:0;gap:10px">
+ <button class="secondary" onclick="openModal('clients')" style="background:#fff;border:1px solid #eee;padding:14px">♙　New Client</button>
+ <button class="secondary" onclick="page='tasks';render()" style="background:#fff;border:1px solid #eee;padding:14px">☑　Add Task</button>
+ <button class="secondary" onclick="openModal('packages')" style="background:#fff;border:1px solid #eee;padding:14px">▤　New Package</button>
+ <button class="secondary" onclick="openModal('payments')" style="background:#fff;border:1px solid #eee;padding:14px">＄　New Invoice</button>
+ </div></div>`;
+
+}
+const configs={
+clients:{title:'Klien',button:'Tambah Klien',fields:[['name','Nama Klien','text'],['phone','Nomor Telepon','text'],['email','Email','email'],['date','Tanggal Acara','date'],['package','Paket Wedding','text'],['status','Status','select',['Confirmed','Pending','Cancelled']] ],cols:['Nama Klien','Telepon','Tanggal Acara','Paket','Status'],keys:['name','phone','date','package','status']},
+events:{title:'Acara',button:'Tambah Acara',fields:[['title','Nama Acara','text'],['client','Nama Klien','text'],['date','Tanggal Acara','date'],['venue','Lokasi / Venue','text'],['status','Status','select',['Confirmed','Pending','Cancelled']]],cols:['Nama Acara','Klien','Tanggal','Venue','Status'],keys:['title','client','date','venue','status']},
+packages:{title:'Paket Wedding',button:'Tambah Paket',fields:[['name','Nama Paket','text'],['price','Harga Paket (angka)','number'],['description','Deskripsi','text']],cols:['Nama Paket','Harga','Deskripsi'],keys:['name','price','description']},
+payments:{title:'Pembayaran',button:'Tambah Pembayaran',fields:[['client','Nama Klien','text'],['amount','Jumlah Pembayaran (angka)','number'],['date','Tanggal Pembayaran','date'],['method','Metode Pembayaran','select',['Transfer Bank','E-Wallet','Tunai']],['status','Status','select',['Paid','Pending']]],cols:['Klien','Jumlah','Tanggal','Metode','Status'],keys:['client','amount','date','method','status']}
+};
+function tablePage(type,filter=''){let c=configs[type],rows=db[type].filter(o=>Object.values(o).join(' ').toLowerCase().includes(filter.toLowerCase()));content.innerHTML=`<div class="section-head"><div><h2>${c.title}</h2><div class="muted">Kelola dan perbarui data ${c.title.toLowerCase()}.</div></div><button class="primary" id="addBtn">＋ ${c.button}</button></div><div class="toolbar"><input class="search" id="searchBox" placeholder="Cari data..." value="${filter}"><div class="spacer"></div><span class="muted">${rows.length} data</span></div><div class="table-wrap"><table><thead><tr>${c.cols.map(x=>`<th>${x}</th>`).join('')}<th>Aksi</th></tr></thead><tbody>${rows.map(o=>`<tr>${c.keys.map(k=>`<td>${k==='status'?statusPill(o[k]):k==='date'?dateFmt(o[k]):k==='price'||k==='amount'?rupiah(o[k]):k==='name'||k==='title'||k==='client'?`<div class="person"><div class="mini-avatar">${initials(String(o[k]))}</div>${o[k]}</div>`:o[k]}</td>`).join('')}<td><div class="actions"><button class="small-btn" onclick="editItem('${type}',${o.id})">Edit</button><button class="small-btn danger" onclick="deleteItem('${type}',${o.id})">Hapus</button></div></td></tr>`).join('')||`<tr><td colspan="${c.cols.length+1}" class="empty">Data tidak ditemukan.</td></tr>`}</tbody></table></div>`;
+document.getElementById('addBtn').onclick=()=>openModal(type);document.getElementById('searchBox').oninput=e=>tablePage(type,e.target.value)}
+function tasksPage(){
+ const finished=db.events.filter(e=>e.completion==='Selesai').length,total=db.events.length;
+ content.innerHTML=`<div class="section-head"><div><h2>Status Acara</h2><div class="muted">Tandai setiap acara jika sudah selesai dilaksanakan.</div></div><span class="pill">${finished} dari ${total} selesai</span></div>
+ <div class="stats" style="grid-template-columns:repeat(2,1fr)">
+ <div class="stat"><div class="stat-top">Acara Selesai</div><strong>${finished}</strong><small>Wedding telah terlaksana</small></div>
+ <div class="stat"><div class="stat-top">Belum Selesai</div><strong>${total-finished}</strong><small>Wedding masih dalam persiapan / menunggu hari acara</small></div></div>
+ <div class="table-wrap"><table><thead><tr><th>Nama Acara</th><th>Klien</th><th>Tanggal</th><th>Lokasi</th><th>Status Pelaksanaan</th><th>Aksi</th></tr></thead><tbody>
+ ${db.events.map(e=>{const done=e.completion==='Selesai';return `<tr><td><b>${e.title}</b></td><td>${e.client}</td><td>${dateFmt(e.date)}</td><td>${e.venue}</td><td>${done?'<span class="pill">Selesai</span>':'<span class="pill pending">Belum Selesai</span>'}</td><td><button class="small-btn" onclick="toggleEventCompletion(${e.id})">${done?'Tandai Belum Selesai':'Tandai Selesai'}</button></td></tr>`}).join('')||'<tr><td colspan="6" class="empty">Belum ada data acara.</td></tr>'}
+ </tbody></table></div>`;
+}
+function toggleEventCompletion(id){const e=db.events.find(x=>x.id===id);if(!e)return;e.completion=e.completion==='Selesai'?'Belum Selesai':'Selesai';save();render()}
+function vendorsPage(){
+ const items=[
+ ['Intimate Wedding',25000000,'Minimalist & Intimate','Akad dan resepsi sederhana dengan dekorasi elegan untuk keluarga dan teman dekat.','Hingga 100 tamu'],
+ ['Garden Party',45000000,'Outdoor & Romantic','Pernikahan outdoor dengan rangkaian bunga, dekorasi taman, dan suasana natural.','Hingga 200 tamu'],
+ ['Royal Wedding',75000000,'Classic & Luxurious','Dekorasi megah, ballroom styling, dokumentasi, dan koordinasi acara lengkap.','Hingga 500 tamu'],
+ ['Traditional Wedding',60000000,'Traditional Heritage','Konsep adat dengan dekorasi tradisional, pelaminan, dan detail budaya.','Hingga 350 tamu'],
+ ['Modern Luxury',90000000,'Modern & Elegant','Tampilan modern premium dengan dekorasi statement dan layanan wedding planning menyeluruh.','Hingga 500 tamu']
+ ];
+ content.innerHTML=`<div class="section-head"><div><h2>Wedding Package Ideas</h2><div class="muted">Contoh konsep paket pernikahan beserta estimasi harga.</div></div></div>
+ <div class="stats" style="grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch">${items.map((x,i)=>`<div class="panel" style="padding:0;overflow:hidden"><img src="assets/${['intimate-wedding.png','garden-party.png','royal-wedding.png','traditional-wedding.png','modern-luxury.png'][i]}" alt="Contoh konsep ${x[0]}" style="display:block;width:100%;height:205px;object-fit:cover;object-position:center"><div style="height:6px;background:${['#c8a85a','#79a58b','#b68b91','#9b8066','#7d879c'][i]}"></div><div style="padding:19px"><div class="eyebrow">${x[2]}</div><h3 style="font:600 19px 'Playfair Display';margin:9px 0">${x[0]}</h3><div style="font:600 22px 'DM Sans';color:#987014;margin:10px 0">${rupiah(x[1])}</div><p class="muted" style="line-height:1.6;min-height:60px">${x[3]}</p><div style="font-size:11px;color:#777;margin-top:12px">${x[4]}</div></div></div>`).join('')}</div>
+ <div class="panel"><h3>Catatan Paket</h3><p class="muted" style="line-height:1.7">Harga di atas merupakan data dummy untuk simulasi website. Estimasi dapat disesuaikan berdasarkan lokasi, jumlah tamu, vendor, dekorasi, dan kebutuhan klien.</p></div>`;
+}
+function analyticsPage(){
+ const visitors=1200,leads=db.clients.length;
+ const consultations=Math.min(leads,db.clients.filter(x=>x.status==='Confirmed').length);
+ const bookings=Math.min(consultations,db.events.filter(x=>x.status==='Confirmed').length);
+ const paidNames=new Set(db.payments.filter(x=>x.status==='Paid').map(x=>x.client));
+ const paidBookings=Math.min(bookings,paidNames.size);
+ const completed=Math.min(paidBookings,db.events.filter(x=>x.completion==='Selesai').length);
+ const stages=[{label:'T1 · Pengunjung website',value:visitors},{label:'T2 · Menghubungi wedding organizer',value:leads},{label:'T3 · Konsultasi / meeting',value:consultations},{label:'T4 · Booking dikonfirmasi',value:bookings},{label:'T5 · Pembayaran diterima',value:paidBookings},{label:'T6 · Wedding selesai dilaksanakan',value:completed}];
+ const overall=completed/visitors*100;
+ content.innerHTML=`<div class="section-head"><div><h2>Wedding Customer Funnel</h2><div class="muted">Perjalanan calon klien dari pertama mengenal WO hingga acara selesai.</div></div></div>
+ <div class="stats" style="grid-template-columns:repeat(3,1fr)">
+ <div class="stat"><div class="stat-top">Website Visitors</div><strong>${visitors.toLocaleString('id-ID')}</strong><small>Data pengunjung dummy</small></div>
+ <div class="stat"><div class="stat-top">Total Leads</div><strong>${leads}</strong><small>Diambil dari data klien</small></div>
+ <div class="stat"><div class="stat-top">Wedding Completed</div><strong>${completed}</strong><small>Dari status pelaksanaan acara</small></div></div>
+ <div class="funnel-panel"><div class="funnel-head"><div><h3>Alur dari pengunjung sampai wedding selesai</h3><p>Setiap tahap dibandingkan dengan tahap sebelumnya.</p></div><div class="funnel-total"><strong>${overall.toFixed(1).replace('.',',')}%</strong><small>Overall conversion</small></div></div>
+ <div class="funnel-list">${stages.map((s,i)=>{const prev=i===0?visitors:stages[i-1].value;const rate=i===0?100:(prev?s.value/prev*100:0);const width=Math.max(30,100-i*9);return `<div class="funnel-step" style="width:${width}%"><span>${s.label}</span><span class="funnel-right"><b class="funnel-count">${s.value.toLocaleString('id-ID')}</b><span class="funnel-rate">${rate.toFixed(1).replace('.',',')}%</span></span></div>`}).join('')}</div>
+ <div class="funnel-foot">Konversi tahap = (jumlah tahap sekarang ÷ jumlah tahap sebelumnya) × 100%. Overall conversion = wedding selesai ÷ pengunjung website × 100%.</div></div>
+ <div class="panel"><h3>Detail Perhitungan Funnel</h3><div class="table-wrap" style="box-shadow:none"><table><thead><tr><th>Tahap</th><th>Jumlah</th><th>Perhitungan konversi</th></tr></thead><tbody>
+ ${stages.map((s,i)=>{const prev=i===0?visitors:stages[i-1].value;const rate=i===0?100:(prev?s.value/prev*100:0);return `<tr><td>${s.label}</td><td><b>${s.value.toLocaleString('id-ID')}</b></td><td>${i===0?'Tahap awal':`${s.value} ÷ ${prev} × 100 = ${rate.toFixed(1).replace('.',',')}%`}</td></tr>`}).join('')}
+ </tbody></table></div><p class="muted" style="line-height:1.7;margin-top:14px">Pengunjung website adalah data dummy. Tahap leads, konsultasi, booking, pembayaran, dan wedding selesai mengikuti data yang dikelola pada menu lainnya. Konsultasi dihitung dari klien berstatus Confirmed, booking dari acara Confirmed.</p></div>`;
+}
+function clientsPage(){tablePage('clients')}function eventsPage(){tablePage('events')}function packagesPage(){tablePage('packages')}function paymentsPage(){tablePage('payments')}
+function openModal(type,item=null){editing=item;let c=configs[type];modalTitle.textContent=(item?'Edit ':'Tambah ')+c.title;formFields.innerHTML=c.fields.map(([key,label,input,opts])=>`<div class="field"><label>${label}</label>${input==='select'?`<select name="${key}">${opts.map(v=>`<option ${item&&item[key]===v?'selected':''}>${v}</option>`).join('')}</select>`:`<input name="${key}" type="${input}" value="${item?String(item[key]).replaceAll('"','&quot;'):''}" required>`}</div>`).join('');dataForm.dataset.type=type;modalBg.classList.remove('hidden')}
+function editItem(type,id){openModal(type,db[type].find(x=>x.id===id))}
+function deleteItem(type,id){if(confirm('Yakin ingin menghapus data ini?')){db[type]=db[type].filter(x=>x.id!==id);save();render()}}
+dataForm.onsubmit=e=>{e.preventDefault();let type=dataForm.dataset.type,record=Object.fromEntries(new FormData(dataForm));if(type==='packages')record.price=Number(record.price);if(type==='payments')record.amount=Number(record.amount);if(editing){Object.assign(editing,record)}else{record.id=Math.max(0,...db[type].map(x=>x.id))+1;db[type].push(record)}save();document.getElementById('modalBg').classList.add('hidden');render()};
+function hideModal(){document.getElementById('modalBg').classList.add('hidden')}document.getElementById('closeModal').onclick=hideModal;document.getElementById('cancelModal').onclick=hideModal;document.getElementById('modalBg').onclick=e=>{if(e.target===document.getElementById('modalBg'))hideModal()};
+</script>
+</body>
+</html>
